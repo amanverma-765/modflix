@@ -1,4 +1,4 @@
-package com.ark.modflix.koin
+package com.ark.koin
 
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp

@@ -1,4 +1,4 @@
-package com.ark.modflix.core.data
+package com.ark.core.data
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
@@ -33,7 +33,7 @@ internal object HttpClientFactory {
                         println(message)
                     }
                 }
-                level = LogLevel.ALL
+                level = LogLevel.INFO
             }
             install(HttpCookies) {
                 storage = AcceptAllCookiesStorage()

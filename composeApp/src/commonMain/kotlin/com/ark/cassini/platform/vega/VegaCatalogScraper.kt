@@ -38,42 +38,41 @@ class VegaCatalogScraper(
         return try {
             val response = httpClient.get(url) {
                 headers {
+                    Headers.applyDefaultHeaders(this)
                     append("Referer", baseUrl)
-                    append(
-                        "User-Agent",
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                    )
                 }
             }
             val htmlContent = response.bodyAsText()
             val document = Ksoup.parse(htmlContent)
             val posts = mutableListOf<MovieCatalog>()
 
-            document.select(".blog-items,.post-list").first()
+            document.select(".blog-items, .post-list").first()
                 ?.select("article")
                 ?.forEach { element ->
-                    val title = element.select("a").attr("title").replace("Download", "")
-                        .let { fullTitle ->
-                            val regex =
-                                """^(.*?)\s*\((\d{4})\)|^(.*?)\s*\((Season \d+)\)""".toRegex()
-                            regex.find(fullTitle)?.value ?: fullTitle
-                        }
+                    val title =
+                        element.select(".post-title, entry-title").text().replace("Download", "")
+                            .let { fullTitle ->
+                                val regex =
+                                    """^(.*?)\s*\((\d{4})\)|^(.*?)\s*\((Season \d+)\)""".toRegex()
+                                regex.find(fullTitle)?.value ?: fullTitle
+                            }
 
                     val link = element.select("a").attr("href")
-                    var image = element.select("a img").attr("data-lazy-src")
 
+                    var image = element.select("a img").attr("data-lazy-src")
                     if (image.isEmpty()) {
                         image = element.select("a img").attr("data-src")
                     }
                     if (image.isEmpty()) {
                         image = element.select("a img").attr("src")
                     }
-
                     if (image.startsWith("//")) {
                         image = "https:$image"
                     }
 
-                    posts.add(MovieCatalog(title, link, image))
+                    val date = element.select(".post-date time").attr("datetime")
+
+                    posts.add(MovieCatalog(title, link, image, date))
                 }
 
             posts

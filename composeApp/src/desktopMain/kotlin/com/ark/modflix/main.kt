@@ -12,7 +12,8 @@ fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         title = "ModFlix",
-        state = rememberWindowState()
+        state = rememberWindowState(),
+        visible = false
     ) {
         App()
     }

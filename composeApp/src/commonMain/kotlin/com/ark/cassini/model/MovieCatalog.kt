@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class MovieCatalog(
     val title: String,
     val link: String,
-    val image: String
+    val imgUrl: String,
+    val date: String
 )

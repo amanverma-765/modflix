@@ -1,18 +1,32 @@
 package com.ark.cassini.model
 
+import com.ark.cassini.model.enums.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieInfo(
+data class MediaInfo(
     val title: String,
-    val imgUrl: String,
-    val synopsis: String,
+    val posterUrl: String?,
+    val synopsis: String?,
     val imdbId: String,
-    val type: Type,
+    val type: MediaType,
     val rating: Float?,
-    val details: HashMap<String, String>,
+    val bgUrl: String?,
+    val creditsCast: List<Cast>?,
+    val genres: List<String>?,
+    val runtime: Int?,
+    val releaseInfo: String?,
     val downloadLinks: List<DownloadLink>
 ) {
+
+    @Serializable
+    data class Cast(
+        val character: String?,
+        val id: Int,
+        val name: String,
+        val profileUrl: String?
+    )
+
     @Serializable
     data class DownloadLink(
         val name: String,
@@ -24,9 +38,5 @@ data class MovieInfo(
             val source: String,
             val link: String
         )
-    }
-
-    enum class Type {
-        MOVIE, SERIES
     }
 }

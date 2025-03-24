@@ -1,6 +1,8 @@
 package com.ark.cassini
 
 import co.touchlab.kermit.Logger
+import com.ark.cassini.model.MediaCatalog
+import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.platform.vega.VegaCatalogScraper
 import com.ark.cassini.platform.vega.VegaInfoScraper
 import com.ark.cassini.utils.LatestUrlProvider
@@ -24,10 +26,22 @@ class Cassini: KoinComponent {
         }
     }
 
-    suspend fun fetchVegaMoviesCatalog() {
+    suspend fun fetchVegaMoviesCatalog(): List<MediaCatalog> {
         val catalog = vegaCatalogScraper.getCatalog()
-        val info = vegaInfoScraper.getInfo(catalog[1].link, catalog[1].imgUrl)
+
+        val info = vegaInfoScraper.getInfo(catalog[1].link)
         val infoString = Json.encodeToString(info)
         Logger.e(infoString)
+
+        return catalog
+    }
+
+    suspend fun fetchVegaMovieInfo(url: String, imgUrl: String): MediaInfo? {
+        val info = vegaInfoScraper.getInfo(url)
+
+        val infoString = Json.encodeToString(info)
+        Logger.e(infoString)
+
+        return info
     }
 }

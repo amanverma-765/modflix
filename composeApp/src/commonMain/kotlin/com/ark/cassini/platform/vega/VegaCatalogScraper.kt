@@ -1,7 +1,7 @@
 package com.ark.cassini.platform.vega
 
 import co.touchlab.kermit.Logger
-import com.ark.cassini.model.MovieCatalog
+import com.ark.cassini.model.MediaCatalog
 import com.ark.cassini.utils.LatestUrlProvider
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.HttpClient
@@ -18,7 +18,7 @@ class VegaCatalogScraper(
         searchQuery: String? = null,
         filter: String? = null,
         page: Int = 1
-    ): List<MovieCatalog> {
+    ): List<MediaCatalog> {
         val baseUrl = latestUrlProvider.getProviderUrl("Vega") ?: run {
             Logger.e("Can't fetch movies: provider not found")
             return emptyList()
@@ -34,7 +34,7 @@ class VegaCatalogScraper(
         return fetchPosts(baseUrl, url)
     }
 
-    private suspend fun fetchPosts(baseUrl: String, url: String): List<MovieCatalog> {
+    private suspend fun fetchPosts(baseUrl: String, url: String): List<MediaCatalog> {
         return try {
             val response = httpClient.get(url) {
                 headers {
@@ -44,7 +44,7 @@ class VegaCatalogScraper(
             }
             val htmlContent = response.bodyAsText()
             val document = Ksoup.parse(htmlContent)
-            val posts = mutableListOf<MovieCatalog>()
+            val posts = mutableListOf<MediaCatalog>()
 
             document.select(".blog-items, .post-list").first()
                 ?.select("article")
@@ -72,7 +72,7 @@ class VegaCatalogScraper(
 
                     val date = element.select(".post-date time").attr("datetime")
 
-                    posts.add(MovieCatalog(title, link, image, date))
+                    posts.add(MediaCatalog(title, link, image, date))
                 }
 
             posts

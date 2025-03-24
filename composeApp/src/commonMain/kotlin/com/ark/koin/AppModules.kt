@@ -1,5 +1,6 @@
 package com.ark.koin
 
+import com.ark.cassini.platform.imdb.ImdbInfoExtractor
 import com.ark.core.data.HttpClientFactory
 import com.ark.cassini.platform.vega.VegaCatalogScraper
 import com.ark.cassini.platform.vega.VegaInfoScraper
@@ -16,4 +17,5 @@ val sharedModule = module {
     singleOf(::LatestUrlProvider)
     singleOf(::VegaCatalogScraper)
     singleOf(::VegaInfoScraper)
+    singleOf(::ImdbInfoExtractor)
 }

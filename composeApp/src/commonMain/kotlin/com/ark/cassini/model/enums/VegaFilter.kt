@@ -1,4 +1,4 @@
-package com.ark.cassini.model
+package com.ark.cassini.model.enums
 
 enum class VegaFilter(
     val title: String,

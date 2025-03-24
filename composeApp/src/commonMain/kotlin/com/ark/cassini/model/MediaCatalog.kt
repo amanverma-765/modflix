@@ -3,7 +3,7 @@ package com.ark.cassini.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieCatalog(
+data class MediaCatalog(
     val title: String,
     val link: String,
     val imgUrl: String,

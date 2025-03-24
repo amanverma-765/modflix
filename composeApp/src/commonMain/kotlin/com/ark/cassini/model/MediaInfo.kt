@@ -10,6 +10,7 @@ data class MediaInfo(
     val synopsis: String?,
     val imdbId: String,
     val type: MediaType,
+    val logoUrl: String?,
     val rating: Float?,
     val bgUrl: String?,
     val creditsCast: List<Cast>?,

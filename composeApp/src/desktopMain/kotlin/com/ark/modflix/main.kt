@@ -13,7 +13,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "ModFlix",
         state = rememberWindowState(),
-        visible = false
+//        visible = false
     ) {
         App()
     }

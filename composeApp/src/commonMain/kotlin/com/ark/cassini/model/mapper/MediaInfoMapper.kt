@@ -5,7 +5,7 @@ import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.model.enums.MediaType
 import com.ark.core.utils.AppConstants
 
-object MovieInfoMapper {
+internal object MediaInfoMapper {
     fun ImdbInfo.toMediaInfo(
         type: MediaType,
         postDownloadLinks: List<MediaInfo.DownloadLink>
@@ -21,7 +21,8 @@ object MovieInfoMapper {
         creditsCast = this.meta.creditsCast?.map { it.toCast() },
         genres = this.meta.genres,
         runtime = this.meta.runtime,
-        releaseInfo = this.meta.releaseInfo
+        releaseInfo = this.meta.releaseInfo,
+        logoUrl = this.meta.logo
     )
 
     private fun ImdbInfo.Meta.CreditsCast.toCast() = MediaInfo.Cast(

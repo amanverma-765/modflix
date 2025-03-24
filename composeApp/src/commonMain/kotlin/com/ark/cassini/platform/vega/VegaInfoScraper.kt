@@ -3,7 +3,7 @@ package com.ark.cassini.platform.vega
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.model.enums.MediaType
-import com.ark.cassini.model.mapper.MovieInfoMapper.toMediaInfo
+import com.ark.cassini.model.mapper.MediaInfoMapper.toMediaInfo
 import com.ark.cassini.platform.imdb.ImdbInfoExtractor
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element

@@ -11,7 +11,7 @@ import io.ktor.http.HttpStatusCode
 
 class ImdbInfoExtractor(private val httpClient: HttpClient) {
 
-    suspend fun getImdbInfo(imdbId: String, mediaType: MediaType): ImdbInfo? {
+    internal suspend fun getImdbInfo(imdbId: String, mediaType: MediaType): ImdbInfo? {
         val infoUrl = AppConstants.IMDB_BASE_URL_1 + "/${mediaType.value}/$imdbId.json"
         val imdbResponse = httpClient.get(infoUrl)
         if (imdbResponse.status != HttpStatusCode.OK) {

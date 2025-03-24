@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ImdbInfo(
+internal data class ImdbInfo(
     @SerialName("meta")
     val meta: Meta
 ) {

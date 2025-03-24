@@ -61,6 +61,8 @@ kotlin {
             implementation(libs.ksoup)
             implementation(libs.kstore.file)
             implementation(libs.kstore)
+            implementation(libs.haze)
+            implementation(libs.material.kolor)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

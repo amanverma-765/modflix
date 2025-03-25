@@ -62,6 +62,7 @@ kotlin {
             implementation(libs.kstore.file)
             implementation(libs.kstore)
             implementation(libs.haze)
+            implementation(libs.haze.materials)
             implementation(libs.material.kolor)
         }
         desktopMain.dependencies {

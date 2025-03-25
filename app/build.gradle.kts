@@ -2,18 +2,19 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
     namespace = "com.ark.modflix"
-    compileSdk = 35
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.ark.modflix"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        versionCode = libs.versions.project.version.code.get().toInt()
+        versionName = libs.versions.project.version.name.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,7 +41,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -56,4 +56,26 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.kermit)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.serialization.json)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.androidx.navigation.composee)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.coil)
+    implementation(libs.coil.network.ktor)
+    implementation(libs.multiplatformSettings)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.ksoup)
+    implementation(libs.kstore.file)
+    implementation(libs.kstore)
+    implementation(libs.haze)
+    implementation(libs.haze.materials)
+    implementation(libs.material.kolor)
 }

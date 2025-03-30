@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.ark.modflix.presentation.navigation.RootDestinations
+import com.ark.modflix.presentation.navigation.RootNavHost
 import com.ark.modflix.presentation.theme.ModFlixTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ModFlixTheme {
-
+                RootNavHost(startDestination = RootDestinations.Home)
             }
         }
     }

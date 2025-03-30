@@ -72,7 +72,6 @@ dependencies {
     implementation(libs.coil.network.ktor)
     implementation(libs.multiplatformSettings)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.ksoup)
     implementation(libs.kstore.file)
     implementation(libs.kstore)
     implementation(libs.haze)

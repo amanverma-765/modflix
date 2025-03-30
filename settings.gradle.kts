@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ModFlix"
 include(":app")
+include(":cassini")

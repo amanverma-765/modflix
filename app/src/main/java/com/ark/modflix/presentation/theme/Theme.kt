@@ -1,4 +1,4 @@
-package com.ark.modflix.ui.theme
+package com.ark.modflix.presentation.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme

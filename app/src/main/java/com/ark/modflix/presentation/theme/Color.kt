@@ -1,4 +1,4 @@
-package com.ark.modflix.ui.theme
+package com.ark.modflix.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

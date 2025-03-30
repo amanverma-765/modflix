@@ -2,6 +2,7 @@ package com.ark.cassini.platform.vega
 
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaCatalog
+import com.ark.cassini.model.enums.VegaFilter
 import com.ark.cassini.utils.LatestUrlProvider
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.HttpClient
@@ -16,7 +17,7 @@ internal class VegaCatalogScraper(
 
     suspend fun getCatalog(
         searchQuery: String? = null,
-        filter: String? = null,
+        filter: VegaFilter? = null,
         page: Int = 1
     ): List<MediaCatalog> {
         val baseUrl = latestUrlProvider.getProviderUrl("Vega") ?: run {

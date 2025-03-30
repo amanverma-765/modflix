@@ -3,6 +3,7 @@ package com.ark.cassini
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaCatalog
 import com.ark.cassini.model.MediaInfo
+import com.ark.cassini.model.enums.VegaFilter
 import com.ark.cassini.platform.imdb.ImdbInfoExtractor
 import com.ark.cassini.platform.vega.VegaCatalogScraper
 import com.ark.cassini.platform.vega.VegaInfoScraper
@@ -29,8 +30,16 @@ class Cassini(platformPath: Path) {
         }
     }
 
-    suspend fun fetchVegaCatalog(): List<MediaCatalog> {
-        return vegaCatalogScraper.getCatalog()
+    suspend fun fetchVegaCatalog(
+        searchQuery: String? = null,
+        filter: VegaFilter? = null,
+        page: Int = 1
+    ): List<MediaCatalog> {
+        return vegaCatalogScraper.getCatalog(
+            searchQuery = searchQuery,
+            filter = filter,
+            page = page
+        )
     }
 
     suspend fun fetchVegaInfo(url: String): MediaInfo? {

@@ -10,5 +10,6 @@ data class HomeCatalog(
     val amazonPrime: List<MediaCatalog>,
     val disneyPlus: List<MediaCatalog>,
     val kDrama: List<MediaCatalog>,
-    val anime: List<MediaCatalog>
+    val anime: List<MediaCatalog>,
+    val miniTv: List<MediaCatalog>
 )

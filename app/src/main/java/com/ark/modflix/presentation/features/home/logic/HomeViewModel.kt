@@ -42,7 +42,6 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                     cassini.fetchVegaInfo(url)
                 }
             }.awaitAll().filterNotNull()
-            Logger.e("Fetched ${catalog.size} trending banners")
             _uiState.update { currentState ->
                 currentState.copy(
                     isLoading = false,
@@ -69,7 +68,8 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 async { cassini.fetchVegaCatalog(filter = VegaFilter.PRIME) },
                 async { cassini.fetchVegaCatalog(filter = VegaFilter.DISNEY_PLUS) },
                 async { cassini.fetchVegaCatalog(filter = VegaFilter.K_DRAMA) },
-                async { cassini.fetchVegaCatalog(filter = VegaFilter.ANIME) }
+                async { cassini.fetchVegaCatalog(filter = VegaFilter.ANIME) },
+                async { cassini.fetchVegaCatalog(filter = VegaFilter.MINI_TV) }
             ).awaitAll()
 
             _uiState.update { currentState ->
@@ -81,7 +81,8 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                         amazonPrime = results[3],
                         disneyPlus = results[4],
                         kDrama = results[5],
-                        anime = results[6]
+                        anime = results[6],
+                        miniTv = results[7]
                     ),
                     isLoading = false
                 )

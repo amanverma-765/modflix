@@ -133,7 +133,6 @@ private fun BannerItem(
 
             // Center logo
             if (banner.logoUrl != null) {
-                Logger.e("Banner logo URL: ${banner.logoUrl}")
                 AsyncImage(
                     imageLoader = ImageLoader(context),
                     model = ImageRequest.Builder(context)

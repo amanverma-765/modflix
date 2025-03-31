@@ -20,11 +20,11 @@ sealed interface RootDestinations {
     data object WatchList : RootDestinations
 
     @Serializable
-    data object Profile : RootDestinations
-
-    @Serializable
     data object Setting : RootDestinations
 
     @Serializable
     data object Download : RootDestinations
+
+    @Serializable
+    data class MediaList(val category: String) : RootDestinations
 }

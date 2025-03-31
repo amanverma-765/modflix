@@ -2,13 +2,14 @@ package com.ark.cassini.model.enums
 
 enum class VegaFilter(
     val title: String,
-    val value: String
+    val value: String?
 ) {
-    TRENDING("Trending", "featured"),
+    LATEST("Latest Release", null),
+    TRENDING("Trending Now", "featured"),
+    NETFLIX("Netflix", "web-series/netflix"),
+    PRIME("Amazon Prime", "web-series/amazon-prime-video"),
+    DISNEY_PLUS("Disney+", "web-series/disney-plus-hotstar"),
     ANIME("Anime", "anime-series"),
     K_DRAMA("K-Drama", "korean-series"),
-    PRIME("Amazon Prime", "web-series/amazon-prime-video"),
-    NETFLIX("Netflix", "web-series/netflix"),
-    DISNEY_PLUS("Disney+", "web-series/disney-plus-hotstar"),
-    MINI_TV("Mini TV", "web-series/mini-tv"),
+    MINI_TV("Mini TV", "web-series/amazon-prime-video/minitv"),
 }

@@ -1,4 +1,4 @@
-package com.ark.modflix.presentation.features.home.components
+package com.ark.modflix.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +40,7 @@ fun CatalogBanner(
     Column(
         modifier = modifier
             .width(150.dp)
+            .clip(CardDefaults.shape)
             .clickable(onClick = onClick)
     ) {
         Card(
@@ -45,7 +48,7 @@ fun CatalogBanner(
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Box(modifier = Modifier.aspectRatio(3f/4f)) {
+            Box(modifier = Modifier.aspectRatio(3f / 4f)) {
                 // Background Image
                 AsyncImage(
                     imageLoader = ImageLoader(LocalContext.current),
@@ -69,7 +72,9 @@ fun CatalogBanner(
             maxLines = 1,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 4.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp)
         )
     }
 }

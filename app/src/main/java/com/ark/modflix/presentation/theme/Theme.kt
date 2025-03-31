@@ -1,6 +1,7 @@
 package com.ark.modflix.presentation.theme
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
@@ -48,6 +49,6 @@ fun ModFlixTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = DarkColorScheme,
         typography = AppTypography,
-        content = content
+        content = { Surface { content() } }
     )
 }

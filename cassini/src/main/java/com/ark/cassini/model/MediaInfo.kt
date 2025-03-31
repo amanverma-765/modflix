@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class MediaInfo(
     val title: String,
     val posterUrl: String?,
+    val pageUrl: String,
     val synopsis: String?,
     val imdbId: String,
     val type: MediaType,

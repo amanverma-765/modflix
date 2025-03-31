@@ -1,11 +1,14 @@
 package com.ark.cassini.utils
 
+import co.touchlab.kermit.Logger
 import com.ark.cassini.model.Provider
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 import kotlinx.io.files.Path
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -19,10 +22,14 @@ internal class LatestUrlProvider(
 ) {
 
     suspend fun refreshLatestProviders() {
-        val response = httpClient.get(AppConstants.PROVIDER_URL).bodyAsText()
+        val response = httpClient.get(AppConstants.PROVIDER_URL)
+        if (response.status != HttpStatusCode.OK) {
+            Logger.e("Failed to fetch latest providers: ${response.status}")
+            return
+        }
 
         val json = Json { ignoreUnknownKeys = true }
-        val jsonObject = json.decodeFromString<JsonObject>(response)
+        val jsonObject = json.decodeFromString<JsonObject>(response.bodyAsText())
 
         @Serializable
         data class Website(

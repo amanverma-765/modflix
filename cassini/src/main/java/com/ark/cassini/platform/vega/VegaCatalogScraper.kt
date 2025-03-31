@@ -9,6 +9,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 
 internal class VegaCatalogScraper(
     private val httpClient: HttpClient,
@@ -43,6 +44,8 @@ internal class VegaCatalogScraper(
                     append("Referer", baseUrl)
                 }
             }
+            if (response.status != HttpStatusCode.OK) return emptyList()
+
             val htmlContent = response.bodyAsText()
             val document = Ksoup.parse(htmlContent)
             val posts = mutableListOf<MediaCatalog>()

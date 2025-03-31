@@ -43,8 +43,8 @@ import org.koin.androidx.compose.koinViewModel
 fun RootHomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onWatchNowClicked: () -> Unit,
-    onCatalogBannerClicked: () -> Unit,
+    onWatchNowClicked: (url: String) -> Unit,
+    onCatalogBannerClicked: (url: String) -> Unit,
     onSeeAllClicked: (category: String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -63,8 +63,8 @@ private fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
-    onWatchNowClicked: () -> Unit,
-    onCatalogBannerClicked: () -> Unit,
+    onWatchNowClicked: (url: String) -> Unit,
+    onCatalogBannerClicked: (url: String) -> Unit,
     onSeeAllClicked: (category: String) -> Unit
 ) {
 
@@ -93,7 +93,7 @@ private fun HomeScreen(
                     } else if (uiState.trendingBanners.isNotEmpty()) {
                         BannerCarousel(
                             banners = uiState.trendingBanners,
-                            onWatchNowClicked = onWatchNowClicked,
+                            onWatchNowClicked = { onWatchNowClicked(it) },
                             modifier = Modifier.fillMaxSize()
                         )
                     }
@@ -184,7 +184,7 @@ private fun CatalogSection(
     modifier: Modifier = Modifier,
     title: String,
     mediaItems: List<MediaCatalog>,
-    onCatalogBannerClicked: () -> Unit,
+    onCatalogBannerClicked: (url: String) -> Unit,
     onSeeAllClicked: () -> Unit
 ) {
     Column(
@@ -218,7 +218,7 @@ private fun CatalogSection(
             items(mediaItems) { item ->
                 CatalogBanner(
                     mediaCatalog = item,
-                    onClick = onCatalogBannerClicked
+                    onClick = { onCatalogBannerClicked(item.link) }
                 )
             }
         }

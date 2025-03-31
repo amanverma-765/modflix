@@ -80,5 +80,8 @@ dependencies {
     implementation(libs.haze.materials)
     implementation(libs.material.kolor)
     implementation(libs.google.fonts)
+    implementation(libs.connectivity.core)
+    implementation(libs.connectivity.android)
+    implementation(libs.connectivity.compose.device)
     implementation(project(":cassini"))
 }

@@ -43,10 +43,10 @@ fun RootNavHost(
         composable<RootDestinations.Home> {
             RootHomeScreen(
                 onWatchNowClicked = {
-                    // Do something
+                    navController.navigate(RootDestinations.Detail(it))
                 },
                 onCatalogBannerClicked = {
-
+                    navController.navigate(RootDestinations.Detail(it))
                 },
                 onSeeAllClicked = { category ->
                     navController.navigate(
@@ -61,7 +61,7 @@ fun RootNavHost(
             val category = VegaFilter.valueOf(mediaList.category)
             RootMediaListScreen(
                 category = category,
-                onCatalogBannerClicked = { navController.navigate(RootDestinations.Detail) },
+                onCatalogBannerClicked = { navController.navigate(RootDestinations.Detail(it)) },
                 onBackClicked = { navController.popBackStack() }
             )
         }
@@ -74,7 +74,10 @@ fun RootNavHost(
 
         composable<RootDestinations.WatchList> { RootWatchListScreen() }
 
-        composable<RootDestinations.Detail> { RootDetailScreen() }
+        composable<RootDestinations.Detail> { navBackStack ->
+            val detail = navBackStack.toRoute<RootDestinations.Detail>()
+            RootDetailScreen(pageUrl = detail.url)
+        }
 
         composable<RootDestinations.Download> { RootDownloadScreen() }
 

@@ -35,13 +35,15 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
             val catalog = cassini.fetchVegaCatalog(
                 filter = VegaFilter.TRENDING,
                 page = 1
-            ).shuffled().take(5)
-            val info = catalog.map { media ->
+            )
+            val selectedItems = catalog.shuffled().take(5)
+            val info = selectedItems.map { media ->
                 async {
                     val url = media.link
                     cassini.fetchVegaInfo(url)
                 }
             }.awaitAll().filterNotNull()
+
             _uiState.update { currentState ->
                 currentState.copy(
                     isLoading = false,
@@ -49,6 +51,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 )
             }
         } catch (e: Exception) {
+            Logger.e(e.message ?: "Unknown error", e)
             _uiState.update {
                 it.copy(
                     isLoading = false,
@@ -88,6 +91,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 )
             }
         } catch (e: Exception) {
+            Logger.e(e.message ?: "Unknown error", e)
             _uiState.update {
                 it.copy(
                     isLoading = false,

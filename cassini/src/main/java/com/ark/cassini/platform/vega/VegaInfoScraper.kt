@@ -11,6 +11,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 
 
 internal class VegaInfoScraper(
@@ -29,6 +30,7 @@ internal class VegaInfoScraper(
                     append("Referer", baseUrl)
                 }
             }
+            if (response.status != HttpStatusCode.OK) return null
 
             val document = Ksoup.parse(response.bodyAsText())
             val infoContainer = document.select(".entry-content, .post-inner")
@@ -83,7 +85,11 @@ internal class VegaInfoScraper(
                 return null
             }
 
-            return imdbInfo.toMediaInfo(type, postDownloadLinks)
+            return imdbInfo.toMediaInfo(
+                url = pageUrl,
+                type = type,
+                postDownloadLinks = postDownloadLinks
+            )
 
         } catch (e: Exception) {
             Logger.e("Error while scraping movie Info: ${e.message}", e, "VegaInfoScraper")

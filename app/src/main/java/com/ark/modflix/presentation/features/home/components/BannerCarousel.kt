@@ -56,7 +56,7 @@ fun BannerCarousel(
     // Auto-scroll effect
     LaunchedEffect(Unit) {
         while (true) {
-            delay(8000)
+            delay(5000)
             coroutineScope.launch {
                 val nextPage = (pagerState.currentPage + 1) % banners.size
                 pagerState.animateScrollToPage(nextPage)

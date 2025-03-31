@@ -3,7 +3,7 @@ package com.ark.modflix.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 // Dark Theme Colors (Netflix-inspired)
-internal val PrimaryDark = Color(0xFFE50914)  // Netflix Red
+internal val PrimaryDark = Color(0xFFFF0B16)  // Netflix Red
 internal val OnPrimaryDark = Color(0xFFFFFFFF)
 internal val PrimaryContainerDark = Color(0xFFB81D24)  // Darker Netflix Red
 internal val OnPrimaryContainerDark = Color(0xFFFFDAD6)

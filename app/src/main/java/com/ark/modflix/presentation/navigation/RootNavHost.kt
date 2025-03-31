@@ -31,6 +31,12 @@ fun RootNavHost(
             RootHomeScreen(
                 onWatchNowClicked = {
                     // Do something
+                },
+                onCatalogBannerClicked = {
+
+                },
+                onSeeAllClicked = {
+
                 }
             )
         }

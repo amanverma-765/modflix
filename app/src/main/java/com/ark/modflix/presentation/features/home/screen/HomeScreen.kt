@@ -1,5 +1,7 @@
 package com.ark.modflix.presentation.features.home.screen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.modifier.modifierLocalProvider
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
@@ -41,14 +44,18 @@ import org.koin.androidx.compose.koinViewModel
 fun RootHomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onWatchNowClicked: () -> Unit
+    onWatchNowClicked: () -> Unit,
+    onCatalogBannerClicked: () -> Unit,
+    onSeeAllClicked: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
         uiState = uiState,
         uiEvent = viewModel::onEvent,
         onWatchNowClicked = onWatchNowClicked,
-        modifier = modifier
+        modifier = modifier,
+        onCatalogBannerClicked = onCatalogBannerClicked,
+        onSeeAllClicked = onSeeAllClicked
     )
 }
 
@@ -57,14 +64,13 @@ private fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
-    onWatchNowClicked: () -> Unit
+    onWatchNowClicked: () -> Unit,
+    onCatalogBannerClicked: () -> Unit,
+    onSeeAllClicked: () -> Unit
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
         LazyColumn(
-            contentPadding = PaddingValues(
-                bottom = 24.dp,
-                top = 8.dp
-            ),
+            contentPadding = PaddingValues(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.padding(
                 start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
@@ -108,7 +114,8 @@ private fun HomeScreen(
                         CatalogSection(
                             title = title,
                             mediaItems = movies,
-                            onMediaClicked = { /* Handle movie click */ }
+                            onCatalogBannerClicked = onCatalogBannerClicked,
+                            onSeeAllClicked = onSeeAllClicked
                         )
                     }
                 }
@@ -122,7 +129,8 @@ private fun CatalogSection(
     modifier: Modifier = Modifier,
     title: String,
     mediaItems: List<MediaCatalog>,
-    onMediaClicked: () -> Unit
+    onCatalogBannerClicked: () -> Unit,
+    onSeeAllClicked: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -144,14 +152,18 @@ private fun CatalogSection(
             Text(
                 text = "See All",
                 style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(bottom = 4.dp)
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = { onSeeAllClicked() })
+                    }
             )
         }
         LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             items(mediaItems) { item ->
                 CatalogBanner(
                     mediaCatalog = item,
-                    onClick = onMediaClicked
+                    onClick = onCatalogBannerClicked
                 )
             }
         }

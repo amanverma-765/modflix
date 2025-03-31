@@ -12,14 +12,7 @@ val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-val bodyFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("Poppins"),
-        fontProvider = provider,
-    )
-)
-
-val displayFontFamily = FontFamily(
+val poppinsFontFamily = FontFamily(
     Font(
         googleFont = GoogleFont("Poppins"),
         fontProvider = provider,
@@ -30,19 +23,28 @@ val displayFontFamily = FontFamily(
 val baseline = Typography()
 
 val AppTypography = Typography(
-    displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
-    displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
-    displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
-    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
-    titleLarge = baseline.titleLarge.copy(fontFamily = displayFontFamily),
-    titleMedium = baseline.titleMedium.copy(fontFamily = displayFontFamily),
-    titleSmall = baseline.titleSmall.copy(fontFamily = displayFontFamily),
-    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
-    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
-    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
-    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
-    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
-    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
+    // Display styles
+    displayLarge = baseline.displayLarge.copy(fontFamily = poppinsFontFamily),
+    displayMedium = baseline.displayMedium.copy(fontFamily = poppinsFontFamily),
+    displaySmall = baseline.displaySmall.copy(fontFamily = poppinsFontFamily),
+
+    // Headline styles
+    headlineLarge = baseline.headlineLarge.copy(fontFamily = poppinsFontFamily),
+    headlineMedium = baseline.headlineMedium.copy(fontFamily = poppinsFontFamily),
+    headlineSmall = baseline.headlineSmall.copy(fontFamily = poppinsFontFamily),
+
+    // Title styles
+    titleLarge = baseline.titleLarge.copy(fontFamily = poppinsFontFamily),
+    titleMedium = baseline.titleMedium.copy(fontFamily = poppinsFontFamily),
+    titleSmall = baseline.titleSmall.copy(fontFamily = poppinsFontFamily),
+
+    // Body styles
+    bodyLarge = baseline.bodyLarge.copy(fontFamily = poppinsFontFamily),
+    bodyMedium = baseline.bodyMedium.copy(fontFamily = poppinsFontFamily),
+    bodySmall = baseline.bodySmall.copy(fontFamily = poppinsFontFamily),
+
+    // Label styles
+    labelLarge = baseline.labelLarge.copy(fontFamily = poppinsFontFamily),
+    labelMedium = baseline.labelMedium.copy(fontFamily = poppinsFontFamily),
+    labelSmall = baseline.labelSmall.copy(fontFamily = poppinsFontFamily),
 )

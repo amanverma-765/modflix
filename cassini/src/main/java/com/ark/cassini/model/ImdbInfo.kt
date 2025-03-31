@@ -50,7 +50,7 @@ data class ImdbInfo(
         @SerialName("releaseInfo")
         val releaseInfo: String? = null,
         @SerialName("runtime")
-        val runtime: Int? = null,
+        val runtime: String? = null,
         @SerialName("slug")
         val slug: String? = null,
         @SerialName("trailers")

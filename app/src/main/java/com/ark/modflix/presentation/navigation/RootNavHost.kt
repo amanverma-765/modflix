@@ -27,7 +27,13 @@ fun RootNavHost(
         modifier = modifier
     ) {
 
-        composable<RootDestinations.Home> { RootHomeScreen() }
+        composable<RootDestinations.Home> {
+            RootHomeScreen(
+                onWatchNowClicked = {
+                    // Do something
+                }
+            )
+        }
 
         composable<RootDestinations.Setting> { RootSettingScreen() }
 

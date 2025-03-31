@@ -2,6 +2,7 @@ package com.ark.modflix.presentation.features.home.logic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import com.ark.cassini.Cassini
 import com.ark.cassini.model.enums.VegaFilter
 import com.ark.modflix.model.HomeCatalog
@@ -31,13 +32,17 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
     private fun fetchTrendingBanners() = viewModelScope.launch {
         _uiState.update { it.copy(isLoading = true) }
         try {
-            val catalog = cassini.fetchVegaCatalog(filter = VegaFilter.TRENDING, page = 1).take(3)
+            val catalog = cassini.fetchVegaCatalog(
+                filter = VegaFilter.TRENDING,
+                page = 1
+            ).shuffled().take(5)
             val info = catalog.map { media ->
                 async {
                     val url = media.link
                     cassini.fetchVegaInfo(url)
                 }
             }.awaitAll().filterNotNull()
+            Logger.e("Fetched ${catalog.size} trending banners")
             _uiState.update { currentState ->
                 currentState.copy(
                     isLoading = false,

@@ -27,7 +27,7 @@ internal class VegaCatalogScraper(
 
         val url = when {
             searchQuery != null -> "$baseUrl/page/$page/?s=$searchQuery"
-            filter != null -> "$baseUrl/$filter/page/$page/"
+            filter != null -> "$baseUrl/${filter.value}/page/$page/"
             else -> baseUrl
         }
 

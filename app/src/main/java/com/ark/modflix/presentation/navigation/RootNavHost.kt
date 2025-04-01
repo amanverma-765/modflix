@@ -1,8 +1,6 @@
 package com.ark.modflix.presentation.navigation
 
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
@@ -11,10 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import co.touchlab.kermit.Logger
 import com.ark.cassini.model.enums.VegaFilter
 import com.ark.modflix.presentation.features.detail.screen.RootDetailScreen
-import com.ark.modflix.presentation.features.download.screen.RootDownloadScreen
+import com.ark.modflix.presentation.features.downloader.screen.RootDownloadScreen
 import com.ark.modflix.presentation.features.home.screen.RootHomeScreen
 import com.ark.modflix.presentation.features.listing.screen.RootMediaListScreen
 import com.ark.modflix.presentation.features.player.screen.RootPlayerScreen
@@ -79,7 +76,7 @@ fun RootNavHost(
             RootDetailScreen(pageUrl = detail.url)
         }
 
-        composable<RootDestinations.Download> { RootDownloadScreen() }
+        composable<RootDestinations.Downloader> { RootDownloadScreen() }
 
     }
 }

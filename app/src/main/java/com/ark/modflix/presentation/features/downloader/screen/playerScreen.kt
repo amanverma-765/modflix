@@ -1,4 +1,4 @@
-package com.ark.modflix.presentation.features.download.screen
+package com.ark.modflix.presentation.features.downloader.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

@@ -23,7 +23,7 @@ sealed interface RootDestinations {
     data object Setting : RootDestinations
 
     @Serializable
-    data object Download : RootDestinations
+    data object Downloader : RootDestinations
 
     @Serializable
     data class MediaList(val category: String) : RootDestinations

@@ -84,4 +84,5 @@ dependencies {
     implementation(libs.connectivity.android)
     implementation(libs.connectivity.compose.device)
     implementation(project(":cassini"))
+    implementation(libs.androidx.material.icons.extended)
 }

@@ -20,7 +20,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
 
     fun onEvent(event: HomeUiEvent) {
         when (event) {
-            HomeUiEvent.ClearErrorMsg -> _uiState.update { it.copy(errorMessage = null) }
+            HomeUiEvent.ClearErrorMsg -> _uiState.update { it.copy(errorMsg = null) }
         }
     }
 
@@ -36,18 +36,19 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 filter = VegaFilter.TRENDING,
                 page = 1
             )
-            val selectedItems = catalog.shuffled().take(5)
-            val info = selectedItems.map { media ->
+            val selectedItems = catalog.shuffled().take(10)
+            val bannerInfo = selectedItems.map { media ->
                 async {
                     val url = media.link
                     cassini.fetchVegaInfo(url)
                 }
             }.awaitAll().filterNotNull()
+                .filter { it.posterUrl != null || it.bgUrl != null }
 
             _uiState.update { currentState ->
                 currentState.copy(
                     isLoading = false,
-                    trendingBanners = info
+                    trendingBanners = bannerInfo
                 )
             }
         } catch (e: Exception) {
@@ -55,7 +56,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
             _uiState.update {
                 it.copy(
                     isLoading = false,
-                    errorMessage = "Failed to fetch trending banners"
+                    errorMsg = "Failed to fetch trending banners"
                 )
             }
         }
@@ -95,7 +96,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
             _uiState.update {
                 it.copy(
                     isLoading = false,
-                    errorMessage = "Failed to fetch catalog data"
+                    errorMsg = "Failed to fetch catalog data"
                 )
             }
         }

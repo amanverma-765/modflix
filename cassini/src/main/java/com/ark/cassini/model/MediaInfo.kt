@@ -18,6 +18,7 @@ data class MediaInfo(
     val genres: List<String>?,
     val runtime: String?,
     val releaseInfo: String?,
+    val trailers: List<String>?,
     val details: Map<String, String>,
     val downloadLinks: List<DownloadLink>
 ) {

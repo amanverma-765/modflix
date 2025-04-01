@@ -26,7 +26,8 @@ internal object MediaInfoMapper {
         releaseInfo = this.meta.releaseInfo,
         logoUrl = this.meta.logo,
         pageUrl = pageUrl,
-        details = details
+        details = details,
+        trailers = this.meta.trailers?.map { "https://www.youtube.com/watch?v=" + it.source }
     )
 
     private fun ImdbInfo.Meta.CreditsCast.toCast() = MediaInfo.Cast(

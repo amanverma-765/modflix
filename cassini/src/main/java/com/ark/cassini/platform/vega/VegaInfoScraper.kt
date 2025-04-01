@@ -132,7 +132,8 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                 downloadLinks = postDownloadLinks,
                 runtime = null,
                 releaseInfo = null,
-                genres = null
+                genres = null,
+                trailers = null
             )
         } catch (e: Exception) {
             Logger.e("Error while scraping movie Info: ${e.message}", e, "VegaInfoScraper")

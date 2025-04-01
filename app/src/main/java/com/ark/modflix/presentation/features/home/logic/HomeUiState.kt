@@ -5,7 +5,7 @@ import com.ark.modflix.model.HomeCatalog
 
 data class HomeUiState(
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
+    val errorMsg: String? = null,
     val trendingBanners: List<MediaInfo> = emptyList(),
     val homeCatalog: HomeCatalog? = null
 )

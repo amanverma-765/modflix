@@ -3,7 +3,6 @@ package com.ark.cassini.platform.vega
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.model.enums.MediaType
-import com.ark.cassini.model.mapper.MediaInfoMapper.toMediaInfo
 import com.ark.cassini.platform.imdb.ImdbInfoExtractor
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
@@ -14,10 +13,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 
 
-internal class VegaInfoScraper(
-    private val httpClient: HttpClient,
-    private val imdbInfoExtractor: ImdbInfoExtractor
-) {
+internal class VegaInfoScraper(private val httpClient: HttpClient) {
 
     suspend fun getInfo(pageUrl: String): MediaInfo? {
         try {
@@ -35,6 +31,23 @@ internal class VegaInfoScraper(
             val document = Ksoup.parse(response.bodyAsText())
             val infoContainer = document.select(".entry-content, .post-inner")
 
+            // Extract title
+            val title = infoContainer.select(".post-title, entry-title")
+                .firstOrNull()?.text()?.replace("Download", "")?.trim()
+                ?: run {
+                    Logger.e("No title found", tag = "VegaInfoScraper")
+                    return null
+                }
+
+            // Extract synopsis
+            val synopsisHeader = infoContainer.select("h3")
+                .firstOrNull { it.select("span").text().lowercase().contains("synopsis") }
+            val synopsis = synopsisHeader?.nextElementSibling()?.text()
+                ?: run {
+                    Logger.e("No synopsis found", tag = "VegaInfoScraper")
+                    null
+                }
+
             // Determine content type
             val type = if (infoContainer.select("h3 strong span").text().contains("Series"))
                 MediaType.SERIES
@@ -46,6 +59,30 @@ internal class VegaInfoScraper(
             // Extract IMDB ID
             val imdbId = imdbIdHeader?.select("a")?.attr("href")
                 ?.let { """\btt\d+\b""".toRegex().find(it)?.value } ?: ""
+
+            // Extract extra details
+            val details = hashMapOf<String, String>()
+            if (imdbIdHeader != null) {
+                val extractedHtml = StringBuilder()
+                var currentNode = imdbIdHeader.nextSibling()
+                while (currentNode != null && currentNode != synopsisHeader) {
+                    extractedHtml.append(currentNode.outerHtml())
+                    currentNode = currentNode.nextSibling()
+                }
+                val detailSection = Ksoup.parse(extractedHtml.toString())
+                val strongTextElements = detailSection.select("strong")
+                for (strongTag in strongTextElements) {
+                    val keyText = strongTag.text()
+                    if (keyText.endsWith(":")) {
+                        val key = keyText.removeSuffix(":").trim()
+                        val value = strongTag.nextSibling()
+                            ?.outerHtml()?.trim() ?: ""
+                        if (value.isNotBlank()) {
+                            details[key] = value
+                        }
+                    }
+                }
+            }
 
             // Extract links
             val postDownloadLinks = mutableListOf<MediaInfo.DownloadLink>()
@@ -80,17 +117,23 @@ internal class VegaInfoScraper(
                 }
             }
 
-            val imdbInfo = imdbInfoExtractor.getImdbInfo(imdbId, type) ?: run {
-                Logger.e("Failed to fetch IMDB info for $imdbId", tag = "VegaInfoScraper")
-                return null
-            }
-
-            return imdbInfo.toMediaInfo(
-                url = pageUrl,
+            return MediaInfo(
+                title = title,
+                posterUrl = null,
+                pageUrl = pageUrl,
+                synopsis = synopsis,
+                imdbId = imdbId,
                 type = type,
-                postDownloadLinks = postDownloadLinks
+                logoUrl = null,
+                rating = null,
+                details = details,
+                bgUrl = null,
+                creditsCast = null,
+                downloadLinks = postDownloadLinks,
+                runtime = null,
+                releaseInfo = null,
+                genres = null
             )
-
         } catch (e: Exception) {
             Logger.e("Error while scraping movie Info: ${e.message}", e, "VegaInfoScraper")
             return null

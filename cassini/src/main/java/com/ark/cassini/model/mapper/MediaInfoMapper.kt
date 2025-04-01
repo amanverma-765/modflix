@@ -7,8 +7,9 @@ import com.ark.cassini.utils.AppConstants
 
 internal object MediaInfoMapper {
     fun ImdbInfo.toMediaInfo(
-        url: String,
+        pageUrl: String,
         type: MediaType,
+        details: Map<String, String>,
         postDownloadLinks: List<MediaInfo.DownloadLink>
     ) = MediaInfo(
         title = this.meta.name,
@@ -24,7 +25,8 @@ internal object MediaInfoMapper {
         runtime = this.meta.runtime,
         releaseInfo = this.meta.releaseInfo,
         logoUrl = this.meta.logo,
-        pageUrl = url
+        pageUrl = pageUrl,
+        details = details
     )
 
     private fun ImdbInfo.Meta.CreditsCast.toCast() = MediaInfo.Cast(

@@ -4,6 +4,7 @@ import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaCatalog
 import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.model.enums.VegaFilter
+import com.ark.cassini.model.mapper.MediaInfoMapper.toMediaInfo
 import com.ark.cassini.platform.imdb.ImdbInfoExtractor
 import com.ark.cassini.platform.vega.VegaCatalogScraper
 import com.ark.cassini.platform.vega.VegaInfoScraper
@@ -21,7 +22,7 @@ class Cassini(platformPath: Path) {
     private val latestUrlProvider = LatestUrlProvider(httpClient, platformPath)
     private val imdbInfoExtractor = ImdbInfoExtractor(httpClient)
     private val vegaCatalogScraper = VegaCatalogScraper(httpClient, latestUrlProvider)
-    private val vegaInfoScraper = VegaInfoScraper(httpClient, imdbInfoExtractor)
+    private val vegaInfoScraper = VegaInfoScraper(httpClient)
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -43,6 +44,18 @@ class Cassini(platformPath: Path) {
     }
 
     suspend fun fetchVegaInfo(url: String): MediaInfo? {
-        return vegaInfoScraper.getInfo(url)
+        val origInfo = vegaInfoScraper.getInfo(pageUrl = url) ?: return null
+        if (origInfo.imdbId.isNotBlank()) {
+            return imdbInfoExtractor.getImdbInfo(
+                imdbId = origInfo.imdbId,
+                mediaType = origInfo.type
+            )?.toMediaInfo(
+                pageUrl = origInfo.pageUrl,
+                type = origInfo.type,
+                postDownloadLinks = origInfo.downloadLinks,
+                details = origInfo.details
+            ) ?: origInfo
+        }
+        return origInfo
     }
 }

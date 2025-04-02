@@ -3,13 +3,13 @@ package com.ark.cassini.scraper.vega
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.model.enums.MediaType
+import com.ark.cassini.utils.safeRequest
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpStatusCode
+
 
 
 internal class VegaInfoScraper(private val httpClient: HttpClient) {
@@ -19,17 +19,22 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
             // Extract base URL for referer
             val baseUrl = pageUrl.split("/").take(3).joinToString("/")
 
-            val response = httpClient.get(pageUrl) {
-                headers {
-                    Headers.applyDefaultHeaders(this)
-                    append("Referer", baseUrl)
+            val response = safeRequest<String> {
+                httpClient.get(pageUrl) {
+                    headers {
+                        Headers.applyDefaultHeaders(this)
+                        append("Referer", baseUrl)
+                    }
                 }
             }
-            if (response.status != HttpStatusCode.OK) return null
 
-            val document = Ksoup.parse(response.bodyAsText())
+            if (response == null) {
+                Logger.e("Can't fetch movie info: response is null")
+                return null
+            }
+
+            val document = Ksoup.parse(response)
             val infoContainer = document.select(".entry-content, .post-inner")
-
 
             // Extract title
             val title = infoContainer.select(".post-title, entry-title")

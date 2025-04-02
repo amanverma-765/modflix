@@ -27,6 +27,7 @@ class MediaListViewModel(private val cassini: Cassini) : ViewModel() {
             if (!uiState.value.loadedPages.contains(page)) {
                 _uiState.update { it.copy(isLoading = true) }
                 val newCatalogs = cassini.fetchVegaCatalog(filter = category, page = page)
+                    ?: throw RuntimeException("Failed to fetch catalog data")
                 _uiState.update { currentState ->
                     currentState.copy(
                         loadedPages = currentState.loadedPages.apply { add(page) },

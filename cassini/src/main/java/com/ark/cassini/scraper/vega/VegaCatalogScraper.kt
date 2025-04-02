@@ -4,12 +4,11 @@ import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaCatalog
 import com.ark.cassini.model.enums.VegaFilter
 import com.ark.cassini.utils.LatestUrlProvider
+import com.ark.cassini.utils.safeRequest
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpStatusCode
 
 internal class VegaCatalogScraper(
     private val httpClient: HttpClient,
@@ -20,21 +19,23 @@ internal class VegaCatalogScraper(
         searchQuery: String? = null,
         filter: VegaFilter? = null,
         page: Int = 1
-    ): List<MediaCatalog> {
+    ): List<MediaCatalog>? {
         val baseUrl = latestUrlProvider.getProviderUrl("Vega") ?: run {
             Logger.e("Can't fetch movies: provider not found")
             return emptyList()
         }
 
-      val url = when {
+        val url = when {
             searchQuery != null -> {
                 if (page > 1) "$baseUrl/page/$page/?s=$searchQuery"
                 else "$baseUrl/?s=$searchQuery"
             }
+
             filter?.value != null -> {
                 if (page > 1) "$baseUrl/${filter.value}/page/$page/"
                 else "$baseUrl/${filter.value}/"
             }
+
             else -> {
                 if (page > 1) "$baseUrl/page/$page/"
                 else "$baseUrl/"
@@ -45,18 +46,23 @@ internal class VegaCatalogScraper(
         return fetchPosts(baseUrl, url)
     }
 
-    private suspend fun fetchPosts(baseUrl: String, url: String): List<MediaCatalog> {
+    private suspend fun fetchPosts(baseUrl: String, url: String): List<MediaCatalog>? {
         return try {
-            val response = httpClient.get(url) {
-                headers {
-                    Headers.applyDefaultHeaders(this)
-                    append("Referer", baseUrl)
+            val response = safeRequest<String> {
+                httpClient.get(url) {
+                    headers {
+                        Headers.applyDefaultHeaders(this)
+                        append("Referer", baseUrl)
+                    }
                 }
             }
-            if (response.status != HttpStatusCode.OK) return emptyList()
 
-            val htmlContent = response.bodyAsText()
-            val document = Ksoup.parse(htmlContent)
+            if (response == null) {
+                Logger.e("Failed to fetch posts: response is null")
+                return null
+            }
+
+            val document = Ksoup.parse(response)
             val posts = mutableListOf<MediaCatalog>()
 
             document.select(".blog-items, .post-list").first()
@@ -91,7 +97,7 @@ internal class VegaCatalogScraper(
             posts
         } catch (e: Exception) {
             println("Error fetching posts: ${e.message}")
-            emptyList()
+            null
         }
     }
 }

@@ -22,14 +22,16 @@ internal class LatestUrlProvider(
 ) {
 
     suspend fun refreshLatestProviders() {
-        val response = httpClient.get(AppConstants.PROVIDER_URL)
-        if (response.status != HttpStatusCode.OK) {
-            Logger.e("Failed to fetch latest providers: ${response.status}")
+        val response = safeRequest<String> {
+            httpClient.get(AppConstants.PROVIDER_URL)
+        }
+        if (response == null) {
+            Logger.e("Failed to fetch latest providers")
             return
         }
 
         val json = Json { ignoreUnknownKeys = true }
-        val jsonObject = json.decodeFromString<JsonObject>(response.bodyAsText())
+        val jsonObject = json.decodeFromString<JsonObject>(response)
 
         @Serializable
         data class Website(

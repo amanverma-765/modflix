@@ -21,6 +21,8 @@ internal object HttpClientFactory {
                 json(
                     json = Json {
                         ignoreUnknownKeys = true
+                        explicitNulls = true
+                        ignoreUnknownKeys = true
                     }
                 )
             }

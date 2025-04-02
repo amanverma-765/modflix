@@ -35,7 +35,7 @@ class Cassini(platformPath: Path) {
         searchQuery: String? = null,
         filter: VegaFilter? = null,
         page: Int = 1
-    ): List<MediaCatalog> {
+    ): List<MediaCatalog>? {
         return vegaCatalogScraper.getCatalog(
             searchQuery = searchQuery,
             filter = filter,

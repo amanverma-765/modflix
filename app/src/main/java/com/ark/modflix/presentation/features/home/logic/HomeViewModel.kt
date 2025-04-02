@@ -39,7 +39,8 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
             val catalog = cassini.fetchVegaCatalog(
                 filter = VegaFilter.TRENDING,
                 page = 1
-            )
+            ) ?: throw RuntimeException("Failed to fetch trending data")
+
             val selectedItems = catalog.shuffled().take(10)
             val bannersInfo = selectedItems.map { media ->
                 async {
@@ -79,9 +80,14 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 async { cassini.fetchVegaCatalog(filter = VegaFilter.ANIME) },
             ).awaitAll()
 
+            if (results.isEmpty()) throw RuntimeException("Failed to fetch home catalog data")
+
+            // Check if all results are null
+            val allNull = results.all { it == null }
+
             _uiState.update { currentState ->
                 currentState.copy(
-                    homeCatalog = HomeCatalog(
+                    homeCatalog = if (allNull) null else HomeCatalog(
                         latest = results[0],
                         trending = results[1],
                         netflix = results[2],
@@ -90,8 +96,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                         kDrama = results[5],
                         anime = results[6]
                     ),
-                    isLoading = false,
-                    errorMsg = if (results.isNotEmpty()) null else "Failed to fetch catalog data"
+                    isLoading = false
                 )
             }
         } catch (e: Exception) {

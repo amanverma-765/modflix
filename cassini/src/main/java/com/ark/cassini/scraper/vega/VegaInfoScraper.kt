@@ -48,7 +48,8 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                 }
 
             // Determine content type
-            val type = if (infoContainer.select("h3 strong span").text().contains("Series"))
+            val typeElement = infoContainer.select("h3 strong span")
+            val type = if (typeElement.text().contains("Series"))
                 MediaType.SERIES
             else MediaType.MOVIE
 
@@ -60,28 +61,57 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                 ?.let { """\btt\d+\b""".toRegex().find(it)?.value } ?: ""
 
             // Extract extra details
-            val details = hashMapOf<String, String>()
-            if (imdbIdHeader != null) {
-                val extractedHtml = StringBuilder()
-                var currentNode = imdbIdHeader.nextSibling()
-                while (currentNode != null && currentNode != synopsisHeader) {
-                    extractedHtml.append(currentNode.outerHtml())
-                    currentNode = currentNode.nextSibling()
+            val details = linkedMapOf<String, String>()
+            val infoHeader = infoContainer.select("h3")
+                .firstOrNull { it.text().contains("Series Info:") || it.text().contains("Info:") }
+
+            if (infoHeader != null) {
+                // Get the paragraph that contains the details (usually follows the info header)
+                val detailsParagraph = infoHeader.nextElementSibling()
+                if (detailsParagraph?.tagName() == "p") {
+                    // Split by <br> tags which typically separate each detail line
+                    val detailLines = detailsParagraph.html().split("<br>")
+                    for (line in detailLines) {
+                        val detailElement = Ksoup.parse(line).body()
+                        val keyValueText = detailElement.text().trim()
+
+                        // Extract keys and values separated by colon
+                        val colonIndex = keyValueText.indexOf(":")
+                        if (colonIndex > 0) {
+                            val key = keyValueText.substring(0, colonIndex).trim()
+                            val value = keyValueText.substring(colonIndex + 1).trim()
+                            if (value.isNotBlank()) {
+                                details[key] = value
+                            }
+                        }
+                    }
                 }
-                val detailSection = Ksoup.parse(extractedHtml.toString())
-                val strongTextElements = detailSection.select("strong")
-                for (strongTag in strongTextElements) {
-                    val keyText = strongTag.text()
-                    if (keyText.endsWith(":")) {
-                        val key = keyText.removeSuffix(":").trim()
-                        val value = strongTag.nextSibling()
-                            ?.outerHtml()?.trim() ?: ""
-                        if (value.isNotBlank()) {
-                            details[key] = value
+                // Fallback to strong tag extraction if the above didn't work
+                if (details.isEmpty()) {
+                    // Select all paragraphs that might contain details
+                    val detailsSection = infoContainer.select("p")
+                        .filter {
+                            it.select("strong").isNotEmpty() && !it.text().contains("Synopsis")
+                        }
+
+                    for (paragraph in detailsSection) {
+                        val strongTags = paragraph.select("strong")
+                        for (strongTag in strongTags) {
+                            val keyText = strongTag.text().trim()
+                            if (keyText.endsWith(":")) {
+                                val key = keyText.removeSuffix(":").trim()
+                                // Get the text after the strong tag until the next strong or <br>
+                                val valueNode = strongTag.nextSibling()
+                                val value = valueNode?.toString()?.trim() ?: ""
+                                if (value.isNotBlank()) {
+                                    details[key] = value
+                                }
+                            }
                         }
                     }
                 }
             }
+
 
             // Extract links
             val postDownloadLinks = mutableListOf<MediaInfo.DownloadLink>()

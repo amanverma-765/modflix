@@ -62,8 +62,8 @@ fun YoutubeBanner(
             leadingContent = {
                 Box(
                     modifier = Modifier
-                        .width(100.dp)
-                        .aspectRatio(4f/3f)
+                        .width(120.dp)
+                        .aspectRatio(16f/9f)
                         .clip(MaterialTheme.shapes.medium)
                         .fillMaxHeight()
                 ) {

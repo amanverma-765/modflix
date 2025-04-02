@@ -69,6 +69,7 @@ fun MediaBanner(
                 .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
+            alignment = Alignment.TopCenter,
             modifier = Modifier.fillMaxSize()
         )
 
@@ -116,7 +117,7 @@ fun MediaBanner(
             if (bannerInfo.logoUrl.isNullOrBlank()) {
                 Text(
                     text = bannerInfo.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     maxLines = 2,
                     overflow = TextOverflow.Clip,
                     fontWeight = FontWeight.Bold,

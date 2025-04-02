@@ -32,6 +32,7 @@ import com.ark.cassini.model.MediaInfo
 fun YoutubeBanner(
     modifier: Modifier = Modifier,
     mediaInfo: MediaInfo,
+    posterUrl: String?,
     onClick: () -> Unit
 ) {
 
@@ -69,7 +70,7 @@ fun YoutubeBanner(
                 ) {
                     AsyncImage(
                         imageLoader = ImageLoader(context),
-                        model = mediaInfo.bgUrl,
+                        model = mediaInfo.bgUrl ?: posterUrl,
                         contentDescription = "Trailer thumbnail",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()

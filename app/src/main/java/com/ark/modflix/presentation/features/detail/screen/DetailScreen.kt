@@ -149,23 +149,27 @@ private fun MediaDetailContent(
         }
 
         // Trailer section as shown in the image
-        if (!mediaInfo.trailers.isNullOrEmpty() && !mediaInfo.trailers?.first().isNullOrEmpty()) {
-            item {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Text(
-                        text = "Trailer",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    YoutubeBanner(
-                        mediaInfo = mediaInfo,
-                        onClick = {
-                            uriHandler.openUri(mediaInfo.trailers?.first()!!)
-                        },
-                    )
-                }
+        item {
+            Column(modifier = Modifier.padding(12.dp)) {
+                Text(
+                    text = "Trailer",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(8.dp)
+                )
+                YoutubeBanner(
+                    mediaInfo = mediaInfo,
+                    posterUrl = posterUrl,
+                    onClick = {
+                        val ytBaseUrl = "https://www.youtube.com/results?search_query="
+                        uriHandler.openUri(
+                            uri = mediaInfo.trailers?.first()
+                                ?: (ytBaseUrl + mediaInfo.title + " trailer")
+                        )
+                    },
+                )
             }
         }
+
 
         // Synopsis section
         if (!mediaInfo.synopsis.isNullOrBlank()) {

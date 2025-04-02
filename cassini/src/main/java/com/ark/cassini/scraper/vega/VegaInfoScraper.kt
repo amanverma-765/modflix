@@ -30,6 +30,7 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
             val document = Ksoup.parse(response.bodyAsText())
             val infoContainer = document.select(".entry-content, .post-inner")
 
+
             // Extract title
             val title = infoContainer.select(".post-title, entry-title")
                 .firstOrNull()?.text()?.replace("Download", "")?.trim()
@@ -37,6 +38,7 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                     Logger.e("No title found", tag = "VegaInfoScraper")
                     return null
                 }
+
 
             // Extract synopsis
             val synopsisHeader = infoContainer.select("h3")
@@ -47,11 +49,13 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                     null
                 }
 
+
             // Determine content type
             val typeElement = infoContainer.select("h3 strong span")
             val type = if (typeElement.text().contains("Series"))
                 MediaType.SERIES
             else MediaType.MOVIE
+
 
             // IMDB Header
             val imdbIdHeader = infoContainer.select("strong")
@@ -60,22 +64,19 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
             val imdbId = imdbIdHeader?.select("a")?.attr("href")
                 ?.let { """\btt\d+\b""".toRegex().find(it)?.value } ?: ""
 
+
+
             // Extract extra details
             val details = linkedMapOf<String, String>()
             val infoHeader = infoContainer.select("h3")
                 .firstOrNull { it.text().contains("Series Info:") || it.text().contains("Info:") }
-
             if (infoHeader != null) {
-                // Get the paragraph that contains the details (usually follows the info header)
                 val detailsParagraph = infoHeader.nextElementSibling()
                 if (detailsParagraph?.tagName() == "p") {
-                    // Split by <br> tags which typically separate each detail line
                     val detailLines = detailsParagraph.html().split("<br>")
                     for (line in detailLines) {
                         val detailElement = Ksoup.parse(line).body()
                         val keyValueText = detailElement.text().trim()
-
-                        // Extract keys and values separated by colon
                         val colonIndex = keyValueText.indexOf(":")
                         if (colonIndex > 0) {
                             val key = keyValueText.substring(0, colonIndex).trim()
@@ -88,7 +89,6 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                 }
                 // Fallback to strong tag extraction if the above didn't work
                 if (details.isEmpty()) {
-                    // Select all paragraphs that might contain details
                     val detailsSection = infoContainer.select("p")
                         .filter {
                             it.select("strong").isNotEmpty() && !it.text().contains("Synopsis")
@@ -100,7 +100,6 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                             val keyText = strongTag.text().trim()
                             if (keyText.endsWith(":")) {
                                 val key = keyText.removeSuffix(":").trim()
-                                // Get the text after the strong tag until the next strong or <br>
                                 val valueNode = strongTag.nextSibling()
                                 val value = valueNode?.toString()?.trim() ?: ""
                                 if (value.isNotBlank()) {
@@ -117,13 +116,11 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
             val postDownloadLinks = mutableListOf<MediaInfo.DownloadLink>()
             val linkSections = infoContainer.select("hr")
             val linkElements = mutableListOf<Element>()
-
             linkSections.forEach { section ->
                 val elements = section.nextElementSiblings()
                     .takeWhile { it.tagName() != "hr" }
                 linkElements.addAll(elements)
             }
-
             linkElements.forEach { element ->
                 if (element.tagName().startsWith("h")) {
                     val linkName = element.text().trim()

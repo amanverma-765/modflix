@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ark.cassini.model.MediaInfo
 import com.ark.modflix.presentation.components.ErrorScreen
 import com.ark.modflix.presentation.components.MediaBanner
+import com.ark.modflix.presentation.features.detail.components.BasicInfoSection
 import com.ark.modflix.presentation.features.detail.components.CastItem
 import com.ark.modflix.presentation.features.detail.components.DetailSection
 import com.ark.modflix.presentation.features.detail.components.SynopsisSection
@@ -30,6 +35,7 @@ import com.ark.modflix.presentation.features.detail.logic.DetailUiEvent
 import com.ark.modflix.presentation.features.detail.logic.DetailUiState
 import com.ark.modflix.presentation.features.detail.logic.DetailViewModel
 import org.koin.androidx.compose.koinViewModel
+import java.security.Key
 
 
 @Composable
@@ -127,6 +133,10 @@ private fun MediaDetailContent(
                     .height(450.dp)
             )
         }
+
+        // Media info section (rating, runtime, genres, release info)
+        item { BasicInfoSection(mediaInfo = mediaInfo) }
+
         // Cast section
         if (!mediaInfo.creditsCast.isNullOrEmpty()) {
             item {
@@ -134,13 +144,13 @@ private fun MediaDetailContent(
                     Text(
                         text = "Cast",
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
                     )
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(mediaInfo.creditsCast!!) { cast ->
+                        items(mediaInfo.creditsCast!!, key = { it.id }) { cast ->
                             CastItem(cast = cast)
                         }
                     }
@@ -174,13 +184,11 @@ private fun MediaDetailContent(
         // Synopsis section
         if (!mediaInfo.synopsis.isNullOrBlank()) {
             item {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.padding(12.dp)
-                ) {
+                Column(modifier = Modifier.padding(12.dp)) {
                     Text(
                         text = "Synopsis",
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(8.dp)
                     )
                     SynopsisSection(synopsis = mediaInfo.synopsis!!)
                 }
@@ -194,7 +202,7 @@ private fun MediaDetailContent(
                     Text(
                         text = "Description",
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 8.dp)
+//                        modifier = Modifier.padding(bottom = 8.dp)
                     )
                     DetailSection(
                         details = mediaInfo.details,

@@ -73,7 +73,7 @@ fun BasicInfoSection(
                         )
                         Text(
                             text = if (mediaInfo.type == MediaType.MOVIE) {
-                                "$it min"
+                                it
                             } else {
                                 "$it/Ep"
                             },

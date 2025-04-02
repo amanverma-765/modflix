@@ -9,16 +9,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.twotone.ImageSearch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -101,7 +99,7 @@ fun MediaBanner(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Center logo
+          // Center logo
             if (bannerInfo.logoUrl != null) {
                 AsyncImage(
                     imageLoader = ImageLoader(context),
@@ -110,6 +108,10 @@ fun MediaBanner(
                         .crossfade(true)
                         .build(),
                     contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f)
+                        .heightIn(max = 200.dp)
                 )
             }
 

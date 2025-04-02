@@ -53,11 +53,7 @@ fun MediaBanner(
 
     val context = LocalContext.current
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .clip(RoundedCornerShape(12.dp))
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
         // Background image
         AsyncImage(
             imageLoader = ImageLoader(context),

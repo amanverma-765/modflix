@@ -15,9 +15,8 @@ class DetailViewModel(private val cassini: Cassini) : ViewModel() {
 
     fun onEvent(event: DetailUiEvent) {
         when (event) {
-            is DetailUiEvent.AddToWatchList -> {}
+            is DetailUiEvent.ToggleWatchList -> {}
             DetailUiEvent.ClearErrorMsg -> _uiState.update { it.copy(errorMsg = null) }
-            is DetailUiEvent.RemoveFromWatchList -> {}
             is DetailUiEvent.FetchMediaInfo -> fetchMediaInfo(event.url)
         }
     }

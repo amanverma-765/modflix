@@ -4,7 +4,7 @@ enum class VegaFilter(
     val title: String,
     val value: String?
 ) {
-    LATEST("Latest Release", null),
+    LATEST("Featured", null),
     TRENDING("Trending Now", "featured"),
     NETFLIX("Netflix", "web-series/netflix"),
     PRIME("Amazon Prime", "web-series/amazon-prime-video"),

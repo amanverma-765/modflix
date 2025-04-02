@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Timer
@@ -38,67 +39,86 @@ fun BasicInfoSection(
         // Rating and runtime row
         if (mediaInfo.rating != null || mediaInfo.runtime != null || mediaInfo.releaseInfo != null) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
             ) {
-                // Rating
-                mediaInfo.rating?.let {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = "Rating",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = it.toString(),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Rating
+                    mediaInfo.rating?.let {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = "Rating",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = it.toString(),
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
                     }
+
+                    // Runtime
+                    mediaInfo.runtime?.let {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Timer,
+                                contentDescription = "Runtime",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = if (mediaInfo.type == MediaType.MOVIE) {
+                                    it
+                                } else {
+                                    "$it/Ep"
+                                },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+
+                    // Release info
+                    mediaInfo.releaseInfo?.let {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.DateRange,
+                                contentDescription = "Release date",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                }
+                if (true) {
+                    Icon(
+                        imageVector = Icons.Filled.BookmarkBorder,
+                        contentDescription = "Add to watchlist",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Filled.BookmarkBorder,
+                        contentDescription = "Add to watchlist",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
 
-                // Runtime
-                mediaInfo.runtime?.let {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Timer,
-                            contentDescription = "Runtime",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = if (mediaInfo.type == MediaType.MOVIE) {
-                                it
-                            } else {
-                                "$it/Ep"
-                            },
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-
-                // Release info
-                mediaInfo.releaseInfo?.let {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.DateRange,
-                            contentDescription = "Release date",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
             }
         }
 

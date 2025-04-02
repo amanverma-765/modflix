@@ -1,25 +1,17 @@
 package com.ark.modflix.presentation.features.detail.screen
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,12 +22,12 @@ import com.ark.modflix.presentation.features.detail.components.BasicInfoSection
 import com.ark.modflix.presentation.features.detail.components.CastItem
 import com.ark.modflix.presentation.features.detail.components.DetailSection
 import com.ark.modflix.presentation.features.detail.components.SynopsisSection
+import com.ark.modflix.presentation.features.detail.components.WatchListTopBar
 import com.ark.modflix.presentation.features.detail.components.YoutubeBanner
 import com.ark.modflix.presentation.features.detail.logic.DetailUiEvent
 import com.ark.modflix.presentation.features.detail.logic.DetailUiState
 import com.ark.modflix.presentation.features.detail.logic.DetailViewModel
 import org.koin.androidx.compose.koinViewModel
-import java.security.Key
 
 
 @Composable
@@ -57,6 +49,7 @@ fun RootDetailScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailScreen(
     modifier: Modifier = Modifier,
@@ -66,11 +59,27 @@ private fun DetailScreen(
     uiState: DetailUiState,
     uiEvent: (DetailUiEvent) -> Unit
 ) {
+
+//    val scrollBehavior =
+//        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     LaunchedEffect(Unit) {
         uiEvent(DetailUiEvent.FetchMediaInfo(pageUrl))
     }
 
-    Scaffold(modifier = modifier) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+//        topBar = {
+//            WatchListTopBar(
+//                isInWatchList = uiState.isInWatchList,
+//                onBackClick = navigateBack,
+//                scrollBehaviour = scrollBehavior,
+//                onWatchListClick = {
+//                    uiEvent(DetailUiEvent.ToggleWatchList(uiState.mediaInfo?.title!!))
+//                }
+//            )
+//        }
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,9 +109,8 @@ private fun DetailScreen(
                 uiState.mediaInfo != null -> {
                     MediaDetailContent(
                         mediaInfo = uiState.mediaInfo,
-                        onAddToWatchlist = { },
-                        onRemoveFromWatchlist = { },
-                        posterUrl = posterUrl
+                        posterUrl = posterUrl,
+//                        scrollBehavior = scrollBehavior
                     )
                 }
             }
@@ -110,17 +118,21 @@ private fun DetailScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MediaDetailContent(
     mediaInfo: MediaInfo,
     posterUrl: String?,
-    onAddToWatchlist: () -> Unit,
-    onRemoveFromWatchlist: () -> Unit
+//    scrollBehavior: TopAppBarScrollBehavior
 ) {
 
     val uriHandler = LocalUriHandler.current
 
-    LazyColumn(Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+//            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) {
         item {
             MediaBanner(
                 bannerInfo = mediaInfo,
@@ -201,8 +213,7 @@ private fun MediaDetailContent(
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(
                         text = "Description",
-                        style = MaterialTheme.typography.titleLarge,
-//                        modifier = Modifier.padding(bottom = 8.dp)
+                        style = MaterialTheme.typography.titleLarge
                     )
                     DetailSection(
                         details = mediaInfo.details,

@@ -46,6 +46,7 @@ import com.ark.cassini.model.MediaInfo
 @Composable
 fun MediaBanner(
     modifier: Modifier = Modifier,
+    posterUrl: String? = null,
     isDetailsBanner: Boolean = false,
     bannerInfo: MediaInfo,
     onWatchNowClicked: () -> Unit,
@@ -59,34 +60,17 @@ fun MediaBanner(
             .fillMaxSize()
             .clip(RoundedCornerShape(12.dp))
     ) {
-
-        if (bannerInfo.bgUrl != null || bannerInfo.posterUrl != null) {
-            // Background image
-            AsyncImage(
-                imageLoader = ImageLoader(context),
-                model = ImageRequest.Builder(context)
-                    .data(bannerInfo.bgUrl ?: bannerInfo.posterUrl)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.TwoTone.ImageSearch,
-                    contentDescription = "No Image",
-                    tint = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier
-                        .padding(bottom = 100.dp)
-                        .size(100.dp)
-                )
-            }
-        }
+        // Background image
+        AsyncImage(
+            imageLoader = ImageLoader(context),
+            model = ImageRequest.Builder(context)
+                .data(bannerInfo.bgUrl ?: bannerInfo.posterUrl ?: posterUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
 
         // Gradient overlay for better text readability
         Box(

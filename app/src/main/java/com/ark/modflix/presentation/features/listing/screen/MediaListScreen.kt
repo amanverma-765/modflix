@@ -46,7 +46,7 @@ fun RootMediaListScreen(
     modifier: Modifier = Modifier,
     category: VegaFilter,
     viewModel: MediaListViewModel = koinViewModel(),
-    onCatalogBannerClicked: (url: String) -> Unit,
+    onBannerClicked: (pageUrl: String, posterUrl: String?) -> Unit,
     onBackClicked: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -54,7 +54,7 @@ fun RootMediaListScreen(
         uiState = uiState.value,
         uiEvent = viewModel::onEvent,
         category = category,
-        onCatalogBannerClicked = onCatalogBannerClicked,
+        onBannerClicked = onBannerClicked,
         modifier = modifier,
         onBackClicked = onBackClicked
     )
@@ -66,7 +66,7 @@ private fun MediaListScreen(
     uiState: ListUiState,
     uiEvent: (ListUiEvent) -> Unit,
     category: VegaFilter,
-    onCatalogBannerClicked: (url: String) -> Unit,
+    onBannerClicked: (pageUrl: String, posterUrl: String?) -> Unit,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -134,7 +134,7 @@ private fun MediaListScreen(
             items(uiState.catalogs) { item ->
                 CatalogBanner(
                     mediaCatalog = item,
-                    onClick = { onCatalogBannerClicked(item.link) }
+                    onClick = { onBannerClicked(item.link, item.imgUrl) }
                 )
             }
         }

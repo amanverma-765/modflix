@@ -25,7 +25,7 @@ fun CatalogSection(
     modifier: Modifier = Modifier,
     title: String,
     mediaItems: List<MediaCatalog>,
-    onCatalogBannerClicked: (url: String) -> Unit,
+    onBannerClicked: (pageUrl: String, posterUrl: String?) -> Unit,
     onSeeAllClicked: () -> Unit
 ) {
     Column(
@@ -59,7 +59,7 @@ fun CatalogSection(
             items(mediaItems) { item ->
                 CatalogBanner(
                     mediaCatalog = item,
-                    onClick = { onCatalogBannerClicked(item.link) }
+                    onClick = { onBannerClicked(item.link, item.imgUrl) }
                 )
             }
         }

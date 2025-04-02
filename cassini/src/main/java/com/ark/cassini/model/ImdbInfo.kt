@@ -34,7 +34,7 @@ data class ImdbInfo(
         @SerialName("id")
         val id: String,
         @SerialName("imdb_id")
-        val imdbId: String,
+        val imdbId: String? = null,
         @SerialName("imdbRating")
         val imdbRating: String? = null,
         @SerialName("language")

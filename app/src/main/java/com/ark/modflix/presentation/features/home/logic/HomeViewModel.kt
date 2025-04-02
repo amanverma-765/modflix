@@ -21,6 +21,10 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
     fun onEvent(event: HomeUiEvent) {
         when (event) {
             HomeUiEvent.ClearErrorMsg -> _uiState.update { it.copy(errorMsg = null) }
+            HomeUiEvent.FetchHomeData -> {
+                fetchTrendingBanners()
+                fetchHomeCatalog()
+            }
         }
     }
 
@@ -37,7 +41,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 page = 1
             )
             val selectedItems = catalog.shuffled().take(10)
-            val bannerInfo = selectedItems.map { media ->
+            val bannersInfo = selectedItems.map { media ->
                 async {
                     val url = media.link
                     cassini.fetchVegaInfo(url)
@@ -48,7 +52,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
             _uiState.update { currentState ->
                 currentState.copy(
                     isLoading = false,
-                    trendingBanners = bannerInfo
+                    trendingBanners = bannersInfo
                 )
             }
         } catch (e: Exception) {
@@ -73,7 +77,6 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 async { cassini.fetchVegaCatalog(filter = VegaFilter.DISNEY_PLUS) },
                 async { cassini.fetchVegaCatalog(filter = VegaFilter.K_DRAMA) },
                 async { cassini.fetchVegaCatalog(filter = VegaFilter.ANIME) },
-                async { cassini.fetchVegaCatalog(filter = VegaFilter.MINI_TV) }
             ).awaitAll()
 
             _uiState.update { currentState ->
@@ -85,10 +88,10 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                         amazonPrime = results[3],
                         disneyPlus = results[4],
                         kDrama = results[5],
-                        anime = results[6],
-                        miniTv = results[7]
+                        anime = results[6]
                     ),
-                    isLoading = false
+                    isLoading = false,
+                    errorMsg = if (results.isNotEmpty()) null else "Failed to fetch catalog data"
                 )
             }
         } catch (e: Exception) {

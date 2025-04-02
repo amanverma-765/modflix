@@ -11,5 +11,5 @@ enum class VegaFilter(
     DISNEY_PLUS("Disney+", "web-series/disney-plus-hotstar"),
     ANIME("Anime", "anime-series"),
     K_DRAMA("K-Drama", "korean-series"),
-    MINI_TV("Mini TV", "web-series/amazon-prime-video/minitv"),
+//    MINI_TV("Mini TV", "web-series/amazon-prime-video/minitv"),
 }

@@ -1,9 +1,8 @@
-package com.ark.cassini.platform.vega
+package com.ark.cassini.scraper.vega
 
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.model.enums.MediaType
-import com.ark.cassini.platform.imdb.ImdbInfoExtractor
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import io.ktor.client.HttpClient

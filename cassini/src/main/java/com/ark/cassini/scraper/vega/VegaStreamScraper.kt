@@ -1,4 +1,4 @@
-package com.ark.cassini.platform.vega
+package com.ark.cassini.scraper.vega
 
 internal class VegaStreamScraper {
 

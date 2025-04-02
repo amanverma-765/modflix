@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 internal object HttpClientFactory {
     internal fun createClient(): HttpClient {
         return HttpClient(OkHttp) {
-            followRedirects = true
+            followRedirects = false
             install(ContentNegotiation) {
                 json(
                     json = Json {
@@ -25,8 +25,8 @@ internal object HttpClientFactory {
                 )
             }
             install(HttpTimeout) {
-                socketTimeoutMillis = 10_000L
-                requestTimeoutMillis = 10_000L
+                socketTimeoutMillis = 20_000L
+                requestTimeoutMillis = 20_000L
             }
             install(Logging) {
                 logger = object : Logger {

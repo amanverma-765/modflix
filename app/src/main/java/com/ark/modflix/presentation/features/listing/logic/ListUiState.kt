@@ -6,5 +6,6 @@ data class ListUiState(
     val isLoading: Boolean = false,
     val errorMsg: String? = null,
     val catalogs: List<MediaCatalog> = emptyList(),
-    val page: Int = 0
+    val page: Int = 0,
+    val loadedPages: MutableSet<Int> = mutableSetOf()
 )

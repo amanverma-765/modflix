@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BannerCarousel(
     banners: List<MediaInfo>,
-    onWatchNowClicked: (url: String) -> Unit,
+    onWatchNowClicked: (pageUrl: String, posterUrl: String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { banners.size })
@@ -39,7 +39,7 @@ fun BannerCarousel(
         val banner = banners[page]
         MediaBanner(
             bannerInfo = banner,
-            onWatchNowClicked = { onWatchNowClicked(banner.pageUrl) },
+            onWatchNowClicked = { onWatchNowClicked(banner.pageUrl, banner.posterUrl) },
         )
     }
 

@@ -1,4 +1,4 @@
-package com.ark.cassini.platform.vega
+package com.ark.cassini.scraper.vega
 
 
 import io.ktor.http.HeadersBuilder

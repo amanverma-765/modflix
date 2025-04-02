@@ -29,7 +29,8 @@ class DetailViewModel(private val cassini: Cassini) : ViewModel() {
             _uiState.update { currentState ->
                 currentState.copy(
                     isLoading = false,
-                    mediaInfo = mediaInfo
+                    mediaInfo = mediaInfo,
+                    errorMsg = if (mediaInfo == null) "Failed to fetch media info" else null,
                 )
             }
         } catch (e: Exception) {

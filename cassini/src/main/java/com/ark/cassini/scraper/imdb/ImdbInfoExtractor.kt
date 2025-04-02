@@ -1,4 +1,4 @@
-package com.ark.cassini.platform.imdb
+package com.ark.cassini.scraper.imdb
 
 import com.ark.cassini.model.ImdbInfo
 import com.ark.cassini.model.enums.MediaType

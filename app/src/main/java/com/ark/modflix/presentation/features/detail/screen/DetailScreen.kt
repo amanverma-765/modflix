@@ -29,6 +29,8 @@ import org.koin.androidx.compose.koinViewModel
 fun RootDetailScreen(
     modifier: Modifier = Modifier,
     pageUrl: String,
+    posterUrl: String?,
+    navigateBack: () -> Unit,
     viewModel: DetailViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -36,7 +38,9 @@ fun RootDetailScreen(
         modifier = modifier,
         pageUrl = pageUrl,
         uiState = uiState,
-        uiEvent = viewModel::onEvent
+        posterUrl = posterUrl,
+        uiEvent = viewModel::onEvent,
+        navigateBack = navigateBack
     )
 }
 
@@ -44,6 +48,8 @@ fun RootDetailScreen(
 private fun DetailScreen(
     modifier: Modifier = Modifier,
     pageUrl: String,
+    posterUrl: String?,
+    navigateBack: () -> Unit,
     uiState: DetailUiState,
     uiEvent: (DetailUiEvent) -> Unit
 ) {
@@ -71,7 +77,10 @@ private fun DetailScreen(
                     ErrorScreen(
                         errorMessage = uiState.errorMsg,
                         onRetry = { uiEvent(DetailUiEvent.FetchMediaInfo(pageUrl)) },
-                        onDismiss = { uiEvent(DetailUiEvent.ClearErrorMsg) }
+                        onDismiss = {
+                            uiEvent(DetailUiEvent.ClearErrorMsg)
+                            navigateBack()
+                        }
                     )
                 }
 
@@ -79,7 +88,8 @@ private fun DetailScreen(
                     MediaDetailContent(
                         mediaInfo = uiState.mediaInfo,
                         onAddToWatchlist = { },
-                        onRemoveFromWatchlist = { }
+                        onRemoveFromWatchlist = { },
+                        posterUrl = posterUrl
                     )
                 }
             }
@@ -90,6 +100,7 @@ private fun DetailScreen(
 @Composable
 private fun MediaDetailContent(
     mediaInfo: MediaInfo,
+    posterUrl: String?,
     onAddToWatchlist: () -> Unit,
     onRemoveFromWatchlist: () -> Unit
 ) {
@@ -103,7 +114,9 @@ private fun MediaDetailContent(
         item {
             MediaBanner(
                 bannerInfo = mediaInfo,
+                posterUrl = posterUrl,
                 onWatchNowClicked = { /* TODO: Handle watch now click */ },
+                onDownloadClicked = { /* TODO: Handle download click */ },
                 isDetailsBanner = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,7 +145,7 @@ private fun MediaDetailContent(
         }
 
         // Trailer section as shown in the image
-        if (!mediaInfo.trailers?.first().isNullOrEmpty()) {
+        if (!mediaInfo.trailers.isNullOrEmpty() && !mediaInfo.trailers?.first().isNullOrEmpty()) {
             item {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(

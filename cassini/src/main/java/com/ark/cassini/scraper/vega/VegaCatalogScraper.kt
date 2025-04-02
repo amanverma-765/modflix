@@ -1,4 +1,4 @@
-package com.ark.cassini.platform.vega
+package com.ark.cassini.scraper.vega
 
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaCatalog
@@ -26,10 +26,19 @@ internal class VegaCatalogScraper(
             return emptyList()
         }
 
-        val url = when {
-            searchQuery != null -> "$baseUrl/page/$page/?s=$searchQuery"
-            filter?.value != null -> "$baseUrl/${filter.value}/page/$page/"
-            else -> "$baseUrl/page/$page/"
+      val url = when {
+            searchQuery != null -> {
+                if (page > 1) "$baseUrl/page/$page/?s=$searchQuery"
+                else "$baseUrl/?s=$searchQuery"
+            }
+            filter?.value != null -> {
+                if (page > 1) "$baseUrl/${filter.value}/page/$page/"
+                else "$baseUrl/${filter.value}/"
+            }
+            else -> {
+                if (page > 1) "$baseUrl/page/$page/"
+                else "$baseUrl/"
+            }
         }
 
         Logger.i("Fetching from URL: $url")

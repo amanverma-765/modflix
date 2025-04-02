@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ark.cassini.model.MediaCatalog
 import com.ark.cassini.model.enums.VegaFilter
+import com.ark.modflix.presentation.components.ErrorScreen
 import com.ark.modflix.presentation.features.home.components.BannerCarousel
 import com.ark.modflix.presentation.features.home.components.CatalogSection
 import com.ark.modflix.presentation.features.home.logic.HomeUiEvent
@@ -34,17 +35,15 @@ import org.koin.androidx.compose.koinViewModel
 fun RootHomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),
-    onWatchNowClicked: (url: String) -> Unit,
-    onCatalogBannerClicked: (url: String) -> Unit,
+    onBannerClicked: (pageUrl: String, posterUrl: String?) -> Unit,
     onSeeAllClicked: (category: String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
         uiState = uiState,
         uiEvent = viewModel::onEvent,
-        onWatchNowClicked = onWatchNowClicked,
         modifier = modifier,
-        onCatalogBannerClicked = onCatalogBannerClicked,
+        onBannerClicked = onBannerClicked,
         onSeeAllClicked = onSeeAllClicked
     )
 }
@@ -54,8 +53,7 @@ private fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit,
-    onWatchNowClicked: (url: String) -> Unit,
-    onCatalogBannerClicked: (url: String) -> Unit,
+    onBannerClicked: (pageUrl: String, posterUrl: String?) -> Unit,
     onSeeAllClicked: (category: String) -> Unit
 ) {
     Scaffold(modifier = modifier) { innerPadding ->
@@ -76,8 +74,7 @@ private fun HomeScreen(
 
                 uiState.homeCatalog != null -> {
                     HomeScreenContent(
-                        onWatchNowClicked = onWatchNowClicked,
-                        onCatalogBannerClicked = onCatalogBannerClicked,
+                        onBannerClicked = onBannerClicked,
                         onSeeAllClicked = onSeeAllClicked,
                         uiState = uiState,
                         uiEvent = uiEvent
@@ -85,7 +82,13 @@ private fun HomeScreen(
                 }
 
                 uiState.errorMsg != null -> {
-                    // Todo
+                    ErrorScreen(
+                        errorMessage = uiState.errorMsg,
+                        onRetry = { uiEvent(HomeUiEvent.FetchHomeData) },
+                        onDismiss = {
+                            uiEvent(HomeUiEvent.ClearErrorMsg)
+                        }
+                    )
                 }
             }
         }
@@ -95,8 +98,7 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     modifier: Modifier = Modifier,
-    onWatchNowClicked: (url: String) -> Unit,
-    onCatalogBannerClicked: (url: String) -> Unit,
+    onBannerClicked: (pageUrl: String, posterUrl: String?) -> Unit,
     onSeeAllClicked: (category: String) -> Unit,
     uiState: HomeUiState,
     uiEvent: (HomeUiEvent) -> Unit
@@ -119,7 +121,9 @@ private fun HomeScreenContent(
                 if (uiState.trendingBanners.isNotEmpty()) {
                     BannerCarousel(
                         banners = uiState.trendingBanners,
-                        onWatchNowClicked = { onWatchNowClicked(it) },
+                        onWatchNowClicked = { pageUrl, posterUrl ->
+                            onBannerClicked(pageUrl, posterUrl)
+                        },
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -178,13 +182,6 @@ private fun HomeScreenContent(
                             uiState.homeCatalog?.kDrama?.take(8)
                         )
                     )
-
-                    VegaFilter.MINI_TV -> add(
-                        Pair(
-                            filter,
-                            uiState.homeCatalog?.miniTv?.take(8)
-                        )
-                    )
                 }
             }
         }
@@ -195,7 +192,7 @@ private fun HomeScreenContent(
                     CatalogSection(
                         mediaItems = movies,
                         title = filter.title,
-                        onCatalogBannerClicked = onCatalogBannerClicked,
+                        onBannerClicked = onBannerClicked,
                         onSeeAllClicked = { onSeeAllClicked(filter.name) }
                     )
                 }

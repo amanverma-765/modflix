@@ -11,7 +11,7 @@ sealed interface RootDestinations {
     data object Search : RootDestinations
 
     @Serializable
-    data class Detail(val url: String) : RootDestinations
+    data class Detail(val pageUrl: String, val posterUrl: String?) : RootDestinations
 
     @Serializable
     data object Player : RootDestinations

@@ -5,9 +5,9 @@ import com.ark.cassini.model.MediaCatalog
 import com.ark.cassini.model.MediaInfo
 import com.ark.cassini.model.enums.VegaFilter
 import com.ark.cassini.model.mapper.MediaInfoMapper.toMediaInfo
-import com.ark.cassini.platform.imdb.ImdbInfoExtractor
-import com.ark.cassini.platform.vega.VegaCatalogScraper
-import com.ark.cassini.platform.vega.VegaInfoScraper
+import com.ark.cassini.scraper.imdb.ImdbInfoExtractor
+import com.ark.cassini.scraper.vega.VegaCatalogScraper
+import com.ark.cassini.scraper.vega.VegaInfoScraper
 import com.ark.cassini.utils.HttpClientFactory
 import com.ark.cassini.utils.LatestUrlProvider
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +45,7 @@ class Cassini(platformPath: Path) {
 
     suspend fun fetchVegaInfo(url: String): MediaInfo? {
         val origInfo = vegaInfoScraper.getInfo(pageUrl = url) ?: return null
-        if (origInfo.imdbId.isNotBlank()) {
+        if (origInfo.imdbId?.isNotBlank() == true) {
             return imdbInfoExtractor.getImdbInfo(
                 imdbId = origInfo.imdbId,
                 mediaType = origInfo.type

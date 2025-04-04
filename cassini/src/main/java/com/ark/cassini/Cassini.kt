@@ -7,6 +7,7 @@ import com.ark.cassini.model.enums.VegaFilter
 import com.ark.cassini.model.mapper.MediaInfoMapper.toMediaInfo
 import com.ark.cassini.scraper.imdb.ImdbInfoExtractor
 import com.ark.cassini.scraper.sources.filepress.FilePressScraper
+import com.ark.cassini.scraper.sources.hubcloud.HubCloudScraper
 import com.ark.cassini.scraper.vega.VegaCatalogScraper
 import com.ark.cassini.scraper.vega.VegaInfoScraper
 import com.ark.cassini.utils.HttpClientFactory

@@ -41,7 +41,7 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
                 page = 1
             ) ?: throw RuntimeException("Failed to fetch trending data")
 
-            val selectedItems = catalog.shuffled().take(10)
+            val selectedItems = catalog.shuffled().take(5)
             val bannersInfo = selectedItems.map { media ->
                 async {
                     val url = media.link

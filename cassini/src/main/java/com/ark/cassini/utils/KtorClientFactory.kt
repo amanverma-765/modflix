@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 internal object HttpClientFactory {
     internal fun createClient(): HttpClient {
         return HttpClient(OkHttp) {
-            followRedirects = false
+            followRedirects = true
             install(ContentNegotiation) {
                 json(
                     json = Json {

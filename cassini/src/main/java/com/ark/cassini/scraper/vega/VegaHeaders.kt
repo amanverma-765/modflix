@@ -3,7 +3,7 @@ package com.ark.cassini.scraper.vega
 
 import io.ktor.http.HeadersBuilder
 
-internal object Headers {
+internal object VegaHeaders {
     fun applyDefaultHeaders(headers: HeadersBuilder) {
         headers.apply {
             append("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")

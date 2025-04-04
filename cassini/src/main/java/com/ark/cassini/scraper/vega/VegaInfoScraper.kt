@@ -22,7 +22,7 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
             val response = safeRequest<String> {
                 httpClient.get(pageUrl) {
                     headers {
-                        Headers.applyDefaultHeaders(this)
+                        VegaHeaders.applyDefaultHeaders(this)
                         append("Referer", baseUrl)
                     }
                 }

@@ -59,3 +59,14 @@ class Cassini(platformPath: Path) {
         return origInfo
     }
 }
+
+//suspend fun main() {
+//
+//    val scraper = FilePressScraper(HttpClientFactory.createClient())
+//    val filePressUrl = "https://filebee.xyz/file/67ee5dba711bc29a5352e4e3"
+//    val mediaStream = scraper.getMediaStream(filePressUrl)
+//    mediaStream?.forEach {
+//        Logger.e("${it.key} -> ${it.value}")
+//    }
+//
+//}

@@ -34,7 +34,7 @@ internal object MediaInfoMapper {
         character = this.character,
         id = this.id,
         name = this.name,
-        profileUrl = if (this.profilePath != null) AppConstants.TMDB_CHARACTERS_BASE_URL + "/w200" + this.profilePath
+        profileUrl = if (this.profilePath != null) AppConstants.TMDB_CHARACTERS_BASE_URL + "/t/p/w200" + this.profilePath
         else null
     )
 }

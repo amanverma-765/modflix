@@ -20,7 +20,7 @@ internal class VegaCatalogScraper(
         filter: VegaFilter? = null,
         page: Int = 1
     ): List<MediaCatalog>? {
-        val baseUrl = latestUrlProvider.getProviderUrl("Vega") ?: run {
+        val baseUrl = latestUrlProvider.getProviderUrl("vega") ?: run {
             Logger.e("Can't fetch movies: provider not found")
             return emptyList()
         }
@@ -51,7 +51,7 @@ internal class VegaCatalogScraper(
             val response = safeRequest<String> {
                 httpClient.get(url) {
                     headers {
-                        Headers.applyDefaultHeaders(this)
+                        VegaHeaders.applyDefaultHeaders(this)
                         append("Referer", baseUrl)
                     }
                 }

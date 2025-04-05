@@ -29,7 +29,8 @@ import com.ark.cassini.model.enums.MediaType
 @Composable
 fun BasicInfoSection(
     modifier: Modifier = Modifier,
-    mediaInfo: MediaInfo
+    mediaInfo: MediaInfo,
+    isInWatchList: Boolean
 ) {
     Column(
         modifier = modifier
@@ -37,7 +38,6 @@ fun BasicInfoSection(
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Rating and runtime row
-        if (mediaInfo.rating != null || mediaInfo.runtime != null || mediaInfo.releaseInfo != null) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
@@ -105,7 +105,7 @@ fun BasicInfoSection(
                         }
                     }
                 }
-                if (true) {
+                if (isInWatchList) {
                     Icon(
                         imageVector = Icons.Filled.BookmarkBorder,
                         contentDescription = "Add to watchlist",
@@ -141,5 +141,4 @@ fun BasicInfoSection(
                 }
             }
         }
-    }
 }

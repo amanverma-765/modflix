@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -60,7 +59,6 @@ fun RootDetailScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailScreen(
     modifier: Modifier = Modifier,
@@ -71,26 +69,11 @@ private fun DetailScreen(
     uiEvent: (DetailUiEvent) -> Unit
 ) {
 
-//    val scrollBehavior =
-//        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-
     LaunchedEffect(Unit) {
         uiEvent(DetailUiEvent.FetchMediaInfo(pageUrl))
     }
 
-    Scaffold(
-        modifier = modifier,
-//        topBar = {
-//            WatchListTopBar(
-//                isInWatchList = uiState.isInWatchList,
-//                onBackClick = navigateBack,
-//                scrollBehaviour = scrollBehavior,
-//                onWatchListClick = {
-//                    uiEvent(DetailUiEvent.ToggleWatchList(uiState.mediaInfo?.title!!))
-//                }
-//            )
-//        }
-    ) { innerPadding ->
+    Scaffold(modifier = modifier) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -121,7 +104,7 @@ private fun DetailScreen(
                     MediaDetailContent(
                         mediaInfo = uiState.mediaInfo,
                         posterUrl = posterUrl,
-//                        scrollBehavior = scrollBehavior
+                        uiState = uiState
                     )
                 }
             }
@@ -129,21 +112,16 @@ private fun DetailScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MediaDetailContent(
     mediaInfo: MediaInfo,
     posterUrl: String?,
-//    scrollBehavior: TopAppBarScrollBehavior
+    uiState: DetailUiState
 ) {
 
     val uriHandler = LocalUriHandler.current
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-//            .nestedScroll(scrollBehavior.nestedScrollConnection)
-    ) {
+    LazyColumn(Modifier.fillMaxSize()) {
         item {
             MediaBanner(
                 bannerInfo = mediaInfo,
@@ -158,7 +136,9 @@ private fun MediaDetailContent(
         }
 
         // Media info section (rating, runtime, genres, release info)
-        item { BasicInfoSection(mediaInfo = mediaInfo) }
+        if (mediaInfo.rating != null || mediaInfo.runtime != null || mediaInfo.releaseInfo != null) {
+            item { BasicInfoSection(mediaInfo = mediaInfo, isInWatchList = uiState.isInWatchList) }
+        }
 
         // Cast section
         if (!mediaInfo.creditsCast.isNullOrEmpty()) {
@@ -183,7 +163,7 @@ private fun MediaDetailContent(
 
         // Trailer section as shown in the image
         item {
-            Column(modifier = Modifier.padding(12.dp)) {
+            Column(Modifier.padding(12.dp)) {
                 Text(
                     text = "Trailer",
                     style = MaterialTheme.typography.titleLarge,

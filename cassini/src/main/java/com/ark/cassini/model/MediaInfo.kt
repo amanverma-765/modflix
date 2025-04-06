@@ -35,6 +35,7 @@ data class MediaInfo(
     data class DownloadLink(
         val name: String,
         val quality: String? = null,
+        val size: String? = null,
         val directLinks: List<DirectLink>? = null
     ) {
         @Serializable

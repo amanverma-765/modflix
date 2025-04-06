@@ -27,12 +27,12 @@ class Cassini(platformPath: Path) {
     private val vegaCatalogScraper = VegaCatalogScraper(httpClient, latestUrlProvider)
     private val vegaInfoScraper = VegaInfoScraper(httpClient)
 
-    init {
-        runBlocking {
-            Logger.i("🔍 Refreshing Providers...")
-            latestUrlProvider.refreshLatestProviders()
-        }
+init {
+    CoroutineScope(Dispatchers.IO).launch {
+        Logger.i("🔍 Refreshing Providers...")
+        latestUrlProvider.refreshLatestProviders()
     }
+}
 
     suspend fun fetchVegaCatalog(
         searchQuery: String? = null,

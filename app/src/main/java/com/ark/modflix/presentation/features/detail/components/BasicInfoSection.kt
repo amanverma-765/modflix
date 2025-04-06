@@ -38,88 +38,87 @@ fun BasicInfoSection(
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         // Rating and runtime row
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+        ) {
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Rating
-                    mediaInfo.rating?.let {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Star,
-                                contentDescription = "Rating",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                            Text(
-                                text = it.toString(),
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                        }
-                    }
-
-                    // Runtime
-                    mediaInfo.runtime?.let {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Timer,
-                                contentDescription = "Runtime",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                            Text(
-                                text = if (mediaInfo.type == MediaType.MOVIE) {
-                                    it
-                                } else {
-                                    "$it/Ep"
-                                },
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                        }
-                    }
-
-                    // Release info
-                    mediaInfo.releaseInfo?.let {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.DateRange,
-                                contentDescription = "Release date",
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                            Text(
-                                text = it,
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                        }
+                // Rating
+                mediaInfo.rating?.let {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "Rating",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = it.toString(),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                 }
-                if (isInWatchList) {
-                    Icon(
-                        imageVector = Icons.Filled.BookmarkBorder,
-                        contentDescription = "Add to watchlist",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Filled.BookmarkBorder,
-                        contentDescription = "Add to watchlist",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
+
+                // Runtime
+                mediaInfo.runtime?.let {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Timer,
+                            contentDescription = "Runtime",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = if (mediaInfo.type == MediaType.MOVIE) {
+                                it
+                            } else {
+                                "$it/Ep"
+                            },
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
 
+                // Release info
+                mediaInfo.releaseInfo?.let {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.DateRange,
+                            contentDescription = "Release date",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
             }
+            if (isInWatchList) {
+                Icon(
+                    imageVector = Icons.Filled.BookmarkBorder,
+                    contentDescription = "Add to watchlist",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Filled.BookmarkBorder,
+                    contentDescription = "Add to watchlist",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+
         }
 
         // Genres
@@ -141,4 +140,5 @@ fun BasicInfoSection(
                 }
             }
         }
+    }
 }

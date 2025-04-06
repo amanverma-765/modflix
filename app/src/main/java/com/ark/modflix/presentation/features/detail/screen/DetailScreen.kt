@@ -13,13 +13,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -32,11 +44,13 @@ import com.ark.modflix.presentation.components.MediaBanner
 import com.ark.modflix.presentation.features.detail.components.BasicInfoSection
 import com.ark.modflix.presentation.features.detail.components.CastItem
 import com.ark.modflix.presentation.features.detail.components.DetailSection
+import com.ark.modflix.presentation.features.detail.components.DownloaderSheet
 import com.ark.modflix.presentation.features.detail.components.SynopsisSection
 import com.ark.modflix.presentation.features.detail.components.YoutubeBanner
 import com.ark.modflix.presentation.features.detail.logic.DetailUiEvent
 import com.ark.modflix.presentation.features.detail.logic.DetailUiState
 import com.ark.modflix.presentation.features.detail.logic.DetailViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -59,6 +73,7 @@ fun RootDetailScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DetailScreen(
     modifier: Modifier = Modifier,
@@ -68,6 +83,11 @@ private fun DetailScreen(
     uiState: DetailUiState,
     uiEvent: (DetailUiEvent) -> Unit
 ) {
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
+ val sheetState = rememberModalBottomSheetState(
+     skipPartiallyExpanded = true
+ )
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         uiEvent(DetailUiEvent.FetchMediaInfo(pageUrl))
@@ -80,13 +100,13 @@ private fun DetailScreen(
                 .padding(
                     top = 0.dp,
                     bottom = innerPadding.calculateBottomPadding(),
-                    start = innerPadding.calculateStartPadding(LayoutDirection.Rtl),
-                    end = innerPadding.calculateEndPadding(LayoutDirection.Rtl)
+                    start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+                    end = innerPadding.calculateEndPadding(LayoutDirection.Ltr)
                 )
         ) {
             when {
                 uiState.isLoading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
                 }
 
                 uiState.errorMsg != null -> {
@@ -104,19 +124,39 @@ private fun DetailScreen(
                     MediaDetailContent(
                         mediaInfo = uiState.mediaInfo,
                         posterUrl = posterUrl,
-                        uiState = uiState
+                        uiState = uiState,
+                        onWatchNowClicked = {
+                            isBottomSheetVisible = true
+                        },
+                        onDownloadClicked = {
+                            isBottomSheetVisible = true
+                        }
                     )
                 }
             }
         }
+        if (isBottomSheetVisible) {
+            DownloaderSheet(
+                sheetState = sheetState,
+                links = uiState.mediaInfo?.downloadLinks,
+                onDismiss = {
+                    coroutineScope.launch {
+                        isBottomSheetVisible = false
+                    }
+                }
+            )
+        }
     }
 }
+
 
 @Composable
 private fun MediaDetailContent(
     mediaInfo: MediaInfo,
     posterUrl: String?,
-    uiState: DetailUiState
+    uiState: DetailUiState,
+    onWatchNowClicked: () -> Unit,
+    onDownloadClicked: () -> Unit
 ) {
 
     val uriHandler = LocalUriHandler.current
@@ -126,8 +166,8 @@ private fun MediaDetailContent(
             MediaBanner(
                 bannerInfo = mediaInfo,
                 posterUrl = posterUrl,
-                onWatchNowClicked = { /* TODO: Handle watch now click */ },
-                onDownloadClicked = { /* TODO: Handle download click */ },
+                onWatchNowClicked = onWatchNowClicked,
+                onDownloadClicked = onDownloadClicked,
                 isDetailsBanner = true,
                 modifier = Modifier
                     .fillMaxWidth()

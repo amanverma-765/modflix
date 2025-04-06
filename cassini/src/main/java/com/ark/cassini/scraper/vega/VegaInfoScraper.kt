@@ -11,7 +11,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 
 
-
 internal class VegaInfoScraper(private val httpClient: HttpClient) {
 
     suspend fun getInfo(pageUrl: String): MediaInfo? {
@@ -68,7 +67,6 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
             // Extract IMDB ID
             val imdbId = imdbIdHeader?.select("a")?.attr("href")
                 ?.let { """\btt\d+\b""".toRegex().find(it)?.value } ?: ""
-
 
 
             // Extract extra details
@@ -137,11 +135,13 @@ internal class VegaInfoScraper(private val httpClient: HttpClient) {
                         directLinks.add(MediaInfo.DownloadLink.DirectLink(sourceTitle, sourceLink))
                     }
                     val qualityMatch = """\d+p\b""".toRegex().find(linkName)
-                    val quality = qualityMatch?.value
+                    val sizeMatch =
+                        """\[\s*([\d.]+(?:MB|GB)(?:/[A-Z])?)\s*]""".toRegex().find(linkName)
                     postDownloadLinks.add(
                         MediaInfo.DownloadLink(
                             name = linkName,
-                            quality = quality,
+                            size = sizeMatch?.groups?.get(1)?.value,
+                            quality = qualityMatch?.value,
                             directLinks = directLinks.takeIf { it.isNotEmpty() }
                         )
                     )

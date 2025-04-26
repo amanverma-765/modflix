@@ -13,18 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -84,9 +78,9 @@ private fun DetailScreen(
     uiEvent: (DetailUiEvent) -> Unit
 ) {
     var isBottomSheetVisible by remember { mutableStateOf(false) }
- val sheetState = rememberModalBottomSheetState(
-     skipPartiallyExpanded = true
- )
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
@@ -138,7 +132,16 @@ private fun DetailScreen(
         if (isBottomSheetVisible) {
             DownloaderSheet(
                 sheetState = sheetState,
-                links = uiState.mediaInfo?.downloadLinks,
+                downloadPageLinks = uiState.mediaInfo?.downloadLinks,
+                streamSource = uiState.streamSource,
+                isSheetLoading = uiState.isSheetLoading,
+                onQualityChange = {
+                    val links = uiState.mediaInfo?.downloadLinks?.first()
+                        ?.directLinks?.map { it.link }
+                    if (links != null) {
+                        uiEvent(DetailUiEvent.FetchStreamSources(links, uiState.mediaInfo.type))
+                    }
+                },
                 onDismiss = {
                     coroutineScope.launch {
                         isBottomSheetVisible = false

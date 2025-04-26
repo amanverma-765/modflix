@@ -39,7 +39,15 @@ class HomeViewModel(private val cassini: Cassini) : ViewModel() {
             val catalog = cassini.fetchVegaCatalog(
                 filter = VegaFilter.TRENDING,
                 page = 1
-            ) ?: throw RuntimeException("Failed to fetch trending data")
+            ) ?: run{
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        isLoading = false,
+                        errorMsg = "Failed to fetch trending data"
+                    )
+                }
+                return@launch
+            }
 
             val selectedItems = catalog.shuffled().take(5)
             val bannersInfo = selectedItems.map { media ->

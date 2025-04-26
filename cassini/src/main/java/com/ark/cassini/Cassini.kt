@@ -3,19 +3,19 @@ package com.ark.cassini
 import co.touchlab.kermit.Logger
 import com.ark.cassini.model.MediaCatalog
 import com.ark.cassini.model.MediaInfo
+import com.ark.cassini.model.StreamSource
+import com.ark.cassini.model.enums.MediaType
 import com.ark.cassini.model.enums.VegaFilter
 import com.ark.cassini.model.mapper.MediaInfoMapper.toMediaInfo
 import com.ark.cassini.scraper.imdb.ImdbInfoExtractor
-import com.ark.cassini.scraper.sources.filepress.FilePressScraper
-import com.ark.cassini.scraper.sources.hubcloud.HubCloudScraper
 import com.ark.cassini.scraper.vega.VegaCatalogScraper
+import com.ark.cassini.scraper.vega.VegaSourceScraper
 import com.ark.cassini.scraper.vega.VegaInfoScraper
 import com.ark.cassini.utils.HttpClientFactory
 import com.ark.cassini.utils.LatestUrlProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.io.files.Path
 
 class Cassini(platformPath: Path) {
@@ -26,13 +26,14 @@ class Cassini(platformPath: Path) {
     private val imdbInfoExtractor = ImdbInfoExtractor(httpClient)
     private val vegaCatalogScraper = VegaCatalogScraper(httpClient, latestUrlProvider)
     private val vegaInfoScraper = VegaInfoScraper(httpClient)
+    private val vegaSourceScraper = VegaSourceScraper(httpClient)
 
-init {
-    CoroutineScope(Dispatchers.IO).launch {
-        Logger.i("🔍 Refreshing Providers...")
-        latestUrlProvider.refreshLatestProviders()
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            Logger.i("🔍 Refreshing Providers...")
+            latestUrlProvider.refreshLatestProviders()
+        }
     }
-}
 
     suspend fun fetchVegaCatalog(
         searchQuery: String? = null,
@@ -60,5 +61,15 @@ init {
             ) ?: origInfo
         }
         return origInfo
+    }
+
+    suspend fun fetchAllStreamSources(
+        downloadPageUrls: List<String>,
+        mediaType: MediaType
+    ): StreamSource? {
+        return vegaSourceScraper.fetchAllStreamSources(
+            downloadPageUrls,
+            mediaType
+        )
     }
 }

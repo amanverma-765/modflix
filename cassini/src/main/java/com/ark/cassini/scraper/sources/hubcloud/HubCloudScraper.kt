@@ -9,12 +9,12 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 
 class HubCloudScraper(private val httpClient: HttpClient) {
-   suspend fun getMediaStreams(vCloudUrl: String): Map<String, String>? {
+    suspend fun getMediaStreams(vCloudUrl: String): Map<String, String>? {
         try {
             val response = httpClient.get(vCloudUrl) {
                 headers { HubCloudHeaders.applyDefaultHeaders(this) }
             }
-            if (response.status != HttpStatusCode.OK && response.status != HttpStatusCode.MovedPermanently) {
+            if (response.status != HttpStatusCode.OK && response.status.value in 300..399) {
                 Logger.e("Error fetching media streams from hubCloud: ${response.status}")
                 return null
             }
@@ -23,9 +23,9 @@ class HubCloudScraper(private val httpClient: HttpClient) {
             val matches = linkRegex.findAll(response.bodyAsText())
             val hubCloudLink = matches.mapNotNull { it.groups[1]?.value }
                 .filter { it.contains("hub") }.firstOrNull() ?: run {
-                    Logger.e("No hub cloud link found in response")
-                    return null
-                }
+                Logger.e("No hub cloud link found in response")
+                return null
+            }
 
             val streams = extractHubCloudLinks(hubCloudLink)
             if (streams.isNullOrEmpty()) {
@@ -40,12 +40,12 @@ class HubCloudScraper(private val httpClient: HttpClient) {
         }
     }
 
-   private suspend fun extractHubCloudLinks(hubCloudLink: String): Map<String, String>? {
+    private suspend fun extractHubCloudLinks(hubCloudLink: String): Map<String, String>? {
         val mediaLinks = mutableMapOf<String, String>()
         val response = httpClient.get(hubCloudLink) {
             headers { HubCloudHeaders.applyDefaultHeaders(this) }
         }
-        if (response.status != HttpStatusCode.OK && response.status != HttpStatusCode.MovedPermanently) {
+        if (response.status != HttpStatusCode.OK && response.status.value in 300..399) {
             Logger.e("Error extracting links from hubCloud: ${response.status}")
             return null
         }

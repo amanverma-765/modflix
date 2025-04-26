@@ -30,7 +30,6 @@ internal suspend inline fun <reified T> safeRequest(
     return handleResponse(response)
 }
 
-
 internal suspend inline fun <reified T> safeRequestWithCallback(
     execute: () -> HttpResponse,
     crossinline onError: (ErrorType) -> Unit

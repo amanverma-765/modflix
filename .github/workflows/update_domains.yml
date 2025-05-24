@@ -1,0 +1,37 @@
+name: Update Domain URLs
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-domains:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run domain updater script
+        working-directory: providers
+        run: python update_domains.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Action Bot"
+          git config user.email "akverma4aman@gmail.com"
+          git add providers/modflix.json
+          git commit -m "🔄 Update domain URLs [auto]" || echo "No changes to commit"
+          git push

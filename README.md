@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/4eb2d83b-c4ba-41f6-b009-fd624625ef5a" alt="MovieHub Logo" width="100" height="100"/>
   
-  # 🎬 MovieHub
+  # 🎬 ModFlix
   
   **A modern movie browser & downloader app built with Jetpack Compose**
   

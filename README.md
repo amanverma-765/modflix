@@ -65,8 +65,8 @@ MovieHub is a sleek movie browsing and downloading app that scrapes movie listin
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/MovieHub.git
-   cd MovieHub
+   git clone https://github.com/amanverma-765/modflix
+   cd modflix
    ```
 
 2. **Open in Android Studio**

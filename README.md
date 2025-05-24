@@ -1,98 +1,125 @@
-# 🎬 MovieHub - Movie Browser & Downloader App
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/4eb2d83b-c4ba-41f6-b009-fd624625ef5a" alt="MovieHub Logo" width="100" height="100"/>
+  
+  # 🎬 MovieHub
+  
+  **A modern movie browser & downloader app built with Jetpack Compose**
+  
+  ![Android](https://img.shields.io/badge/Platform-Android-green) 
+  ![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue) 
+  ![Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-orange)
+</div>
 
-**MovieHub** is a sleek and modern movie browsing and downloading app built with **Jetpack Compose**. It scrapes movie listings and download/streaming links from **Vegamovies** and fetches detailed movie and series metadata using **IMDb APIs**.
+---
 
-> ⚠️ **Disclaimer:** We do not host or store any movies, videos, or streaming content. All the movie data, links, and streaming sources are scraped from publicly available third-party websites such as **Vegamovies**. This app is for educational purposes only.
+## About
+
+MovieHub is a sleek movie browsing and downloading app that scrapes movie listings from Vegamovies and fetches detailed metadata using IMDb APIs. Built with modern Android technologies for a smooth user experience.
+
+> ⚠️ **Disclaimer:** This app is for educational purposes only. We don't host any content - all links are scraped from public websites.
 
 ---
 
 ## ✨ Features
 
-- 🔍 **Browse** latest and trending movies and TV series.
-- 🎞️ **Detailed movie pages** with poster, genre, rating, description, cast, and more.
-- ⬇️ **Easy download** or **instant streaming** of content using scraped links.
-- 🧠 **Movie & Series data** powered by IMDb APIs.
-- 🌐 **Scraping** powered by `Jsoup` and network requests handled using `Ktor`.
-- 💅 **Modern Android UI** built using Jetpack Compose.
+- 🔍 Browse latest and trending movies & TV series
+- 🎞️ Detailed movie pages with IMDb data
+- ⬇️ Download and streaming options
+- 🎨 Modern Material Design UI
+- ⚡ Fast and responsive performance
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology       | Usage                                      |
-|------------------|--------------------------------------------|
-| Kotlin           | Core programming language                  |
-| Jetpack Compose  | Declarative UI toolkit                     |
-| Ktor             | HTTP client for networking                 |
-| Jsoup            | HTML parsing and web scraping              |
-| IMDb APIs        | Movie and series metadata                  |
+| Technology | Purpose |
+|------------|---------|
+| **Kotlin** | Programming language |
+| **Jetpack Compose** | Modern UI toolkit |
+| **Ktor** | HTTP client for networking |
+| **Jsoup** | HTML parsing and web scraping |
+| **IMDb APIs** | Movie and series metadata |
 
 ---
 
 ## 📸 Screenshots
 
-| Home Screen | Movie Detail | Download Options | Listing Page |
-|-------------|--------------|------------------|----------------|
-| ![Home Screen](https://github.com/user-attachments/assets/7e9f9251-57fa-4dec-89df-7f2fe1468043) | ![Movie Detail](https://github.com/user-attachments/assets/b6d9535f-c396-443e-9c27-0e0fee0daed1) | ![Download Options](https://github.com/user-attachments/assets/510b5cef-e486-483b-be50-861bc4f913c3) | ![Listing Page](https://github.com/user-attachments/assets/6e417151-db44-44db-b5f0-9556a49ef359) |
+<div align="center">
+
+| Home Screen | Movie Details | Download Options | Movie Listing |
+|-------------|---------------|------------------|---------------|
+| <img src="https://github.com/user-attachments/assets/7e9f9251-57fa-4dec-89df-7f2fe1468043" width="180"/> | <img src="https://github.com/user-attachments/assets/b6d9535f-c396-443e-9c27-0e0fee0daed1" width="180"/> | <img src="https://github.com/user-attachments/assets/510b5cef-e486-483b-be50-861bc4f913c3" width="180"/> | <img src="https://github.com/user-attachments/assets/6e417151-db44-44db-b5f0-9556a49ef359" width="180"/> |
+
+</div>
 
 ---
 
-## 📦 How to Build
+## 🚀 Getting Started
 
-To build and run the app locally:
+### Prerequisites
+- Android Studio (latest version)
+- Android SDK (Min API 21, Target API 33+)
+- JDK 11 or higher
 
-1. **Clone the Repository**
+### Installation
+
+1. **Clone the repository**
    ```bash
    git clone https://github.com/yourusername/MovieHub.git
    cd MovieHub
+   ```
 
-2. **Open Project in Android Studio**
+2. **Open in Android Studio**
+   - Open Android Studio
+   - Select "Open an existing project"
+   - Choose the MovieHub folder
 
-   * Launch Android Studio
-   * Select **"Open an existing project"**
-   * Navigate to the cloned `MovieHub` directory and open it
+3. **Build and Run**
+   - Wait for Gradle sync to complete
+   - Connect your device or start an emulator
+   - Click the Run button ▶️
 
-3. **Wait for Gradle to Sync**
-
-   * Ensure all dependencies are downloaded
-
-4. **Run the App**
-
-   * Connect your Android device (or use an emulator)
-   * Click the green **Run** ▶️ button, or use:
-
-     ```bash
-     ./gradlew installDebug
-     ```
-
-> ✅ **Minimum SDK Version**: 21
-> 📱 **Target SDK Version**: 33+
-> ⚙️ **Build Tool Version**: Compatible with Android Gradle Plugin 8.0+
+   Or use command line:
+   ```bash
+   ./gradlew installDebug
+   ```
 
 ---
 
-## ⚠️ Disclaimer
+## ⚠️ Legal Disclaimer
 
-This application is intended **solely for educational and research purposes**.
-We **do not host, store, or distribute** any movies, videos, or streaming content.
-All movie and series information, including streaming and download links, is **scraped from publicly accessible third-party websites** such as **Vegamovies** and **Luxmovies**.
+**Important:** This application is for educational purposes only.
 
-If you are a copyright owner and believe your content is being misused, please contact the original source.
-
----
-
-## ❤️ Contributing
-
-We welcome contributions from the community!
-
-* Fork the repository
-* Create a new branch (`git checkout -b feature-name`)
-* Make your changes
-* Commit and push (`git commit -m "Add new feature"`)
-* Open a Pull Request
+- We don't host, store, or distribute any movies or videos
+- All content links are scraped from publicly available websites
+- Movie data comes from IMDb's public APIs
+- Respect copyright laws in your jurisdiction
 
 ---
 
-## 👨‍💻 Developer
+## 🤝 Contributing
 
-Developed with ❤️ using Kotlin and Jetpack Compose.
+Contributions are welcome! Here's how:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+3. Make your changes
+4. Commit your changes (`git commit -m "Add new feature"`)
+5. Push to the branch (`git push origin feature/new-feature`)
+6. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is for educational use only. Commercial use is prohibited.
+
+---
+
+<div align="center">
+
+**Built with ❤️ using Kotlin & Jetpack Compose**
+
+⭐ Star this repo if you find it helpful!
+
+</div>
